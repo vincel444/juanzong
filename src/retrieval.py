@@ -22,30 +22,48 @@ PDF_EXTS = {".pdf"}
 DOCX_EXTS = {".docx"}
 SUPPORTED_EXTS = TEXT_EXTS | PDF_EXTS | DOCX_EXTS
 
-# 测试管理文件不是知识资料，摄入时会污染 RAG 上下文，一律排除：
-#   data/manifest.csv、data/README.md、data/BUG_TEMPLATE.md、data/questions/ 目录、*_TEMPLATE.md
-IGNORED_FILE_NAMES = {"readme.md", "manifest.csv", "bug_template.md"}
-IGNORED_DIR_NAMES = {"questions"}
-TEMPLATE_SUFFIX = "_template.md"
-
 MAX_CHARS_PER_DOC = 200_000  # 单文档截断保护，防止误放超大文件拖垮装载
+
+# data/ 下同时维护资料清单、问题集和故障模板。它们不是案卷内容，不能
+# 进入上下文，否则模型可能把参考答案或元信息误当成原始证据。
+EXCLUDED_DIR_NAMES = {
+    "questions",
+    "question",
+    "管理文件",
+}
+EXCLUDED_FILE_NAMES = {
+    "manifest.csv",
+    "BUG_TEMPLATE.md",
+    "QUESTION_TEMPLATE.md",
+    "index.sqlite",
+}
+EXCLUDED_FILE_NAMES_LOWER = {name.casefold() for name in EXCLUDED_FILE_NAMES}
 
 
 def scan_documents() -> list[Path]:
-    """扫描资料库目录下支持的文件（自动排除测试管理文件）。"""
+    """扫描资料库目录下支持的文件。"""
     if not DATA_DIR.exists():
         return []
-    out: list[Path] = []
-    for p in DATA_DIR.rglob("*"):
-        if p.suffix.lower() not in SUPPORTED_EXTS or not p.is_file():
+    documents: list[Path] = []
+    for path in DATA_DIR.rglob("*"):
+        if not path.is_file() or path.suffix.lower() not in SUPPORTED_EXTS:
             continue
-        rel = p.relative_to(DATA_DIR)
-        if any(part.lower() in IGNORED_DIR_NAMES for part in rel.parts[:-1]):
+        # 只按目录名过滤管理目录；这样 code_qa/ 下开源项目自己的 README
+        # 仍可作为代码问答上下文，而 data/README.md 会被排除。
+        relative_parts = path.relative_to(DATA_DIR).parts
+        if any(part.casefold() in EXCLUDED_DIR_NAMES for part in relative_parts[:-1]):
             continue
-        if p.name.lower() in IGNORED_FILE_NAMES or p.name.lower().endswith(TEMPLATE_SUFFIX):
+        # 根目录说明文件是管理文件；资料子目录中的 README 可能是代码项目
+        # 的真实文档，应保留。*_TEMPLATE.md 后缀作为兜底规则，防止未来
+        # 新增的模板文件被误当成资料。
+        if len(relative_parts) == 1 and (
+            path.name.casefold() == "readme.md"
+            or path.name.casefold() in EXCLUDED_FILE_NAMES_LOWER
+            or path.name.lower().endswith("_template.md")
+        ):
             continue
-        out.append(p)
-    return out
+        documents.append(path)
+    return sorted(documents)
 
 
 def _extract_pdf(path: Path) -> list[str]:
