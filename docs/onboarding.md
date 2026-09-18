@@ -1,61 +1,60 @@
 # 给组员的测试上手指南（3 步跑起来）
 
-> 前提：Windows 10/11 + NVIDIA 显卡（显存 ≥4GB 即可先跑 1.7B；4B 建议 ≥8GB）。
-> 模型权重不入库，需单独下载（见第 2 步）。
+> 前提：Windows 10/11 + NVIDIA 显卡（≥4GB 显存可只跑 1.7B；≥8GB 可双模型同驻）。
+> 模型与推理引擎体积大，不入库，需按第 2 步单独下载（每项只下一次，之后可断网）。
 
-## 1. 装环境（约 10 分钟）
+## 1. 拉代码 + 装 Python 依赖（约 5 分钟）
 
 ```bash
-git clone https://github.com/<ACCOUNT>/juanzong.git
+git clone https://github.com/vincel444/juanzong.git
 cd juanzong
-
-# 用任意 Python 3.10+，或直接用现成 venv
 python -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
-pip install torch --index-url https://download.pytorch.org/whl/cu128
-pip install "transformers==4.57.1" accelerate fastapi uvicorn
 ```
 
-注意：**transformers 必须是 4.57.1**（更高版本与模型自定义代码不兼容）。
+注意：**不要**尝试 `pip install llama-cpp-python`（Windows 无预编译轮子、本地编译需 MSVC）。
 
-## 2. 下载模型权重（联网一次，约 11GB）
+## 2. 下载推理引擎与模型（约 15 分钟）
 
-从 HuggingFace 下载两个模型仓库到本地任意目录（如 `D:/models/`）：
-- https://huggingface.co/XHToken/Spark-X2.5-1.7B
-- https://huggingface.co/XHToken/Spark-X2.5-4B
+**① llama.cpp 预编译包**（CUDA 版，需 NVIDIA 驱动 ≥ 580）
+直连 GitHub 失败时用镜像前缀 `https://ghfast.top/` 或 `https://gh-proxy.com/`：
 
-需要下载的文件：全部 `model-*.safetensors` + `config.json`、`tokenizer.json`、
-`tokenizer_config.json`、`vocab.json`、`merges.txt`、`chat_template.jinja`、
-`generation_config.json`、`configuration_spark.py`、`modeling_spark.py`、`special_tokens_map.json`。
+- `llama-b11026-bin-win-cuda-13.4-x64.zip`（约 143MB）
+- `cudart-llama-bin-win-cuda-13.4-x64.zip`（约 404MB）
 
-国内加速：`HF_ENDPOINT=https://hf-mirror.com huggingface-cli download XHToken/Spark-X2.5-1.7B`
+两个包解压到**同一个目录**（例如 `C:/llama/`），确保 `llama-server.exe` 与 `cudart64_13.dll` 在同一层。
 
-## 3. 启动（两个推理服务 + 一个界面）
+**② 官方 GGUF 量化模型**（HuggingFace 镜像）
+- `https://hf-mirror.com/XHToken/Spark-X2.5-1.7B-GGUF/resolve/main/Spark-X2.5-1.7B-Q4_K_M.gguf`（1.1GB）
+- `https://hf-mirror.com/XHToken/Spark-X2.5-4B-GGUF/resolve/main/Spark-X2.5-4B-Q4_K_M.gguf`（2.6GB）
+
+放到 `juanzong/models/` 目录下。
+
+## 3. 启动（两个终端）
 
 ```bash
-# 终端1：1.7B 常驻服务
-python scripts/serve_transformers.py --model "D:/models/Spark-X2.5-1.7B" --port 11435
+# 终端1：启动双模型服务（若 llama.cpp 不在默认路径，加 --bin 参数）
+python scripts/start_llama_servers.py --bin "C:/llama/llama-b11026-bin-win-cuda-13.4-x64"
 
-# 终端2：4B 深度服务（可后启动）
-python scripts/serve_transformers.py --model "D:/models/Spark-X2.5-4B" --port 11436
-
-# 终端3：应用界面
+# 终端2：启动应用界面
 python src/app.py
 ```
 
-浏览器打开 http://127.0.0.1:11435 对应服务健康检查；应用界面地址见终端输出（默认 7860）。
-点击界面"检测模型服务"确认双模型可用，然后往 `data/` 丢文档即可提问。
+浏览器打开终端2 提示的地址（默认 http://127.0.0.1:7860），点「检测模型服务」确认双模型可用，
+然后把文档丢进 `data/` 目录即可提问。
 
 ## 常见问题
 
 | 现象 | 处理 |
 |---|---|
-| 启动报 rope_parameters 相关错误 | transformers 版本不是 4.57.1 |
-| 请求报 top_k -1 错误 | 拉取最新代码（已修复） |
-| 4B 很慢 | 显存不足触发 CPU offload，属预期；可等 GGUF 量化版 |
-| 显存不够 8GB | 只跑 1.7B 服务，应用仍可用（4B 档会提示未启动） |
+| 启动报找不到 llama-server.exe | `--bin` 路径要指到解压后的目录层级 |
+| 显存不足 / CUDA out of memory | 改小 `-ngl`（如 20）或只启动 1.7B：`--only 17b` |
+| 思考过程有内容但回答为空 | 已实现自动降级兜底；若仍出现，调大对应 max_tokens |
+| 回答不引用出处 | 确认 `data/` 下有可解析文档（支持 pdf/docx/md/txt/代码） |
+| 速度异常慢（几 tok/s） | 检查 `-ngl` 是否为 99；退到 CPU 会慢很多 |
 
-## 项目结构
+## 性能参考（本机 RTX 5060 Laptop 8GB）
 
-见 [README.md](README.md)；分工与开发规范见 `docs/`。
+详见 `docs/speed-benchmark.md`：1.7B 122–146 tok/s、4B 63 tok/s、双驻 5.5GB 显存；
+轻档问答 <1s，深档 30–50s。
