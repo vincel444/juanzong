@@ -19,10 +19,26 @@ from config import (BACKEND_STYLE, GEN_KWARGS, LARGE_BASE_URL, LARGE_MODEL,
 
 
 class Tier(str, Enum):
-    """思考档位：低档=1.7B 关闭思考快速应答；高档=4B 开启思考深度推理。"""
+    """思考档位（三档自适应，均由官方 chat template 开关驱动）：
+    LOW    1.7B 关闭思考 —— 快问快答，目标 <1s
+    MEDIUM 1.7B 开启思考 —— 日常推理，兼顾质量与时延
+    HIGH   4B 开启思考   —— 跨文档深度审阅
+    """
 
     LOW = "low"
+    MEDIUM = "medium"
     HIGH = "high"
+
+
+def think_enabled(tier: Tier) -> bool:
+    return tier in (Tier.MEDIUM, Tier.HIGH)
+
+
+def model_for(tier: Tier) -> tuple[str, str]:
+    """返回 (模型名, 服务地址)。"""
+    if tier == Tier.HIGH:
+        return LARGE_MODEL, LARGE_BASE_URL
+    return SMALL_MODEL, SMALL_BASE_URL
 
 
 @dataclass
@@ -69,7 +85,7 @@ def _chat_ollama(base_url: str, model: str, messages: list[dict], think: bool,
 def chat(model: str, base_url: str, messages: list[dict], tier: Tier,
          max_tokens: int = 1024) -> GenResult:
     """调用一次对话补全，返回带性能埋点的结果（消融实验直接取数）。"""
-    think = tier == Tier.HIGH
+    think = think_enabled(tier)
     start = time.perf_counter()
     if BACKEND_STYLE == "ollama":
         data = _chat_ollama(base_url, model, messages, think, max_tokens)
@@ -92,15 +108,25 @@ def chat(model: str, base_url: str, messages: list[dict], tier: Tier,
                      model=model, tier=tier)
 
 
-# 两个模型的便捷入口
+# 三个档位的便捷入口
 def ask_small(question: str, system: str = "", max_tokens: int = 1024) -> GenResult:
+    """轻档：1.7B 关闭思考。"""
     messages = ([{"role": "system", "content": system}] if system else []) + [
         {"role": "user", "content": question}
     ]
     return chat(SMALL_MODEL, SMALL_BASE_URL, messages, Tier.LOW, max_tokens)
 
 
-def ask_large(question: str, system: str = "", max_tokens: int = 2048) -> GenResult:
+def ask_medium(question: str, system: str = "", max_tokens: int = 3072) -> GenResult:
+    """中档：1.7B 开启思考（思考本身耗 token，上限需留足）。"""
+    messages = ([{"role": "system", "content": system}] if system else []) + [
+        {"role": "user", "content": question}
+    ]
+    return chat(SMALL_MODEL, SMALL_BASE_URL, messages, Tier.MEDIUM, max_tokens)
+
+
+def ask_large(question: str, system: str = "", max_tokens: int = 4096) -> GenResult:
+    """高档：4B 开启思考。思考过程本身会消耗较多 token，故默认上限取 4096。"""
     messages = ([{"role": "system", "content": system}] if system else []) + [
         {"role": "user", "content": question}
     ]
