@@ -1,8 +1,14 @@
-"""双模型路由 + 端到端问答。"""
+"""三档自适应路由 + 端到端问答。
+
+档位策略（全部由官方 chat template 的 enable_thinking 开关驱动，无额外魔改）：
+    LOW    1.7B 关思考  简明事实型问题（目标 <1s）
+    MEDIUM 1.7B 开思考  需要推理但资料范围小（数秒）
+    HIGH   4B  开思考   跨文档审阅 / 长文分析 / 多条款对比（数十秒）
+"""
 from __future__ import annotations
 
 from config import DEEP_KEYWORDS, DEEP_MIN_CHARS
-from inference import GenResult, Tier, ask_large, ask_small
+from inference import GenResult, Tier, ask_large, ask_medium, ask_small
 
 SYSTEM_PROMPT = (
     "你是完全在本地设备上运行的文档助手「卷宗」。"
@@ -10,18 +16,22 @@ SYSTEM_PROMPT = (
     "资料不足以回答时明确说明，不要编造。"
 )
 
+# 需要推理、但不必动用 4B 的信号词
+REASON_KEYWORDS = ["为什么", "分析", "计算", "推断", "判断", "解释", "原因", "如何理解"]
+REASON_MIN_CHARS = 25
 
-def route(question: str, has_context: bool = False) -> Tier:
-    """规则版路由（TODO(B-3): 升级为由 1.7B 判断意图后动态路由）。"""
-    if len(question) >= DEEP_MIN_CHARS:
+
+def route(question: str) -> Tier:
+    """规则版三档路由（TODO(B-3): 升级为由 1.7B 输出档位标签后动态路由）。"""
+    if len(question) >= DEEP_MIN_CHARS or any(k in question for k in DEEP_KEYWORDS):
         return Tier.HIGH
-    if any(kw in question for kw in DEEP_KEYWORDS):
-        return Tier.HIGH
+    if len(question) >= REASON_MIN_CHARS or any(k in question for k in REASON_KEYWORDS):
+        return Tier.MEDIUM
     return Tier.LOW
 
 
 def answer(question: str) -> tuple[GenResult, list]:
-    """端到端问答：解析资料 -> 优先整卷装载，超限退回检索兜底 -> 路由生成。"""
+    """端到端问答：解析资料 -> 优先整卷装载，超限退回检索兜底 -> 按档位生成。"""
     from retrieval import full_context, load_documents, retrieve
 
     chunks = load_documents()
@@ -34,8 +44,18 @@ def answer(question: str) -> tuple[GenResult, list]:
         mode = "检索召回"
 
     user_content = f"资料（{mode}）：\n{context}\n\n问题：{question}" if context else question
-    if route(question) == Tier.HIGH:
+    tier = route(question)
+    if tier == Tier.HIGH:
         result = ask_large(user_content, system=SYSTEM_PROMPT)
+    elif tier == Tier.MEDIUM:
+        result = ask_medium(user_content, system=SYSTEM_PROMPT)
     else:
         result = ask_small(user_content, system=SYSTEM_PROMPT)
+
+    # 智能降级：思考过程吃满输出上限仍未给出正式回答时（1.7B 思考档易发生），
+    # 自动用同模型关闭思考重试一次，保证用户始终拿到答案。
+    if not result.text and result.thinking:
+        fallback = ask_small(user_content, system=SYSTEM_PROMPT)
+        fallback.thinking = result.thinking  # 保留原思考内容，界面仍可展示
+        result = fallback
     return result, refs
