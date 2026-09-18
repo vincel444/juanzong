@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 模型权重与工具（体积大，不入库）
+models/
+tools/
+*.gguf
+*.safetensors
+
+# 运行时产物
+data/index.sqlite
+docs/bench_result.csv
+
+# IDE / 系统
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
