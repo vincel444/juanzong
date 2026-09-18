@@ -22,14 +22,30 @@ PDF_EXTS = {".pdf"}
 DOCX_EXTS = {".docx"}
 SUPPORTED_EXTS = TEXT_EXTS | PDF_EXTS | DOCX_EXTS
 
+# 测试管理文件不是知识资料，摄入时会污染 RAG 上下文，一律排除：
+#   data/manifest.csv、data/README.md、data/BUG_TEMPLATE.md、data/questions/ 目录、*_TEMPLATE.md
+IGNORED_FILE_NAMES = {"readme.md", "manifest.csv", "bug_template.md"}
+IGNORED_DIR_NAMES = {"questions"}
+TEMPLATE_SUFFIX = "_template.md"
+
 MAX_CHARS_PER_DOC = 200_000  # 单文档截断保护，防止误放超大文件拖垮装载
 
 
 def scan_documents() -> list[Path]:
-    """扫描资料库目录下支持的文件。"""
+    """扫描资料库目录下支持的文件（自动排除测试管理文件）。"""
     if not DATA_DIR.exists():
         return []
-    return [p for p in DATA_DIR.rglob("*") if p.suffix.lower() in SUPPORTED_EXTS]
+    out: list[Path] = []
+    for p in DATA_DIR.rglob("*"):
+        if p.suffix.lower() not in SUPPORTED_EXTS or not p.is_file():
+            continue
+        rel = p.relative_to(DATA_DIR)
+        if any(part.lower() in IGNORED_DIR_NAMES for part in rel.parts[:-1]):
+            continue
+        if p.name.lower() in IGNORED_FILE_NAMES or p.name.lower().endswith(TEMPLATE_SUFFIX):
+            continue
+        out.append(p)
+    return out
 
 
 def _extract_pdf(path: Path) -> list[str]:
