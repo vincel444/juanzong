@@ -39,6 +39,9 @@ def _ping(model: str, base_url: str) -> bool:
         return False
 
 
+TIER_LABEL = {Tier.LOW: "轻档·1.7B快答", Tier.MEDIUM: "中档·1.7B推理", Tier.HIGH: "深档·4B审阅"}
+
+
 def chat_turn(question: str, history: list):
     from router import answer
 
@@ -47,25 +50,26 @@ def chat_turn(question: str, history: list):
     try:
         result, refs = answer(question)
         cites = "、".join(sorted({f"{r.doc_name} p{r.page}" for r in refs})) or "无"
-        thinking_note = f"\n\n<details><summary>思考过程（{len(result.thinking)} 字）</summary>\n{result.thinking}\n</details>" if result.thinking else ""
+        thinking_note = f"\n\n<details><summary>思考过程（{len(result.thinking)} 字）</summary>\n\n{result.thinking}\n\n</details>" if result.thinking else ""
         reply = (
             f"{result.text}\n\n---\n"
-            f"档位：{result.tier.value}（{result.model}）｜时延 {result.latency_ms} ms｜"
-            f"输入 {result.prompt_tokens} tok / 输出 {result.eval_tokens} tok｜出处：{cites}"
+            f"档位：{TIER_LABEL.get(result.tier, result.tier.value)}（{result.model}）｜"
+            f"时延 {result.latency_ms/1000:.1f} s｜输出 {result.eval_tokens} tok｜出处：{cites}"
             f"{thinking_note}"
         )
         history = history + [{"role": "user", "content": question},
                              {"role": "assistant", "content": reply}]
     except Exception as e:  # 后端未启动 / 网络异常等
         history = history + [{"role": "user", "content": question},
-                             {"role": "assistant", "content": f"调用失败：{e}\n请确认推理后端已启动并拉取模型。"}]
+                             {"role": "assistant", "content": f"调用失败：{e}\n请确认推理服务已启动。"}]
     return history, ""
 
 
 with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
     gr.Markdown(
         "## 卷宗 — 隐私优先的本地长文档智能工作台\n"
-        "Spark-X2.5 双模型端侧协作：1.7B 常驻快答，4B 深度审阅。全程离线，数据不出设备。"
+        "Spark-X2.5 端侧三档自适应：轻档 1.7B 快答（<1s）→ 中档 1.7B 推理 → 深档 4B 跨文档审阅。"
+        "全程离线，数据不出设备。"
     )
     status = gr.Textbox(label="后端状态", value="点击检测", interactive=False)
     check_btn = gr.Button("检测模型服务")
