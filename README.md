@@ -3,50 +3,54 @@
 2026 iFLYTEK AI开发者大赛 · Spark-X2.5端侧模型创新挑战赛 参赛作品。
 
 在本地设备上完全离线运行：整卷装载资料（利用 Spark-X2.5 原生 1M 上下文），
-双模型协作（1.7B 常驻快答 + 4B 深度审阅），回答带出处溯源，数据不出设备。
+**三档自适应**（1.7B 快答 / 1.7B 推理 / 4B 深度审阅），回答带出处溯源，数据不出设备。
+
+## 关键指标（RTX 5060 Laptop 8GB 实测）
+
+| 指标 | 数值 |
+|---|---|
+| 1.7B 推理速度 | 122–146 tok/s（llama.cpp Q4_K_M，GPU 全层卸载） |
+| 4B 推理速度 | 63 tok/s |
+| 双模型同驻显存 | 5.5 GB / 8.1 GB |
+| 轻档问答时延 | 0.4–2.0 s |
+| 深档深度审阅 | 30–50 s（含 3000+ 字思考） |
+
+> 相比官方 HF 权重的 transformers 直跑（1.7B 仅 3.5 tok/s），llama.cpp 路线提速 **35–60 倍**。
+> 详见 `docs/speed-benchmark.md`。
 
 ## 目录结构
 
 ```
 juanzong/
 ├─ src/
-│  ├─ config.py      # 全局配置（模型路径、上下文长度、路由阈值）
-│  ├─ inference.py   # 推理封装：双模型懒加载 + 思考档位 + 性能埋点   [开发A]
-│  ├─ retrieval.py   # 资料解析与混合检索                            [开发B]
-│  ├─ router.py      # 双模型路由 + 端到端问答                       [开发B]
-│  └─ app.py         # Gradio 离线界面
+│  ├─ config.py      # 服务地址、模型名、路由阈值
+│  ├─ inference.py   # 推理客户端：三档思考 + 性能埋点（OpenAI 兼容）
+│  ├─ retrieval.py   # 资料解析（pdf/docx/md/代码）+ 整卷装载 + 检索兜底
+│  ├─ router.py      # 三档自适应路由 + 智能降级兜底
+│  └─ app.py         # Gradio 离线界面（显示档位/时延/出处/思考过程）
 ├─ scripts/
-│  └─ bench_thinking_tiers.py  # 思考档位消融基准（产出 CSV）        [开发A跑, 成员C用]
+│  ├─ start_llama_servers.py   # 一键启动双模型服务（推荐）
+│  ├─ bench_thinking_tiers.py  # 消融基准：{1.7B,4B} x {开/关思考} -> CSV
+│  ├─ serve_transformers.py    # 备用：transformers 直跑服务
+│  └─ serve_gguf.py            # 备用：llama-cpp-python 版服务
 ├─ docs/
-│  ├─ week1-deploy-checklist.md # 开发A 第1周部署验证清单（先看这个！）
-│  └─ bench_result.csv          # 基准数据输出
-├─ data/             # 测试资料库（成员C放入案卷/文档）
-└─ models/           # 量化模型权重（不入库）
+│  ├─ onboarding.md            # 组员上手指南（先看这个）
+│  ├─ backend-setup.md         # 推理后端搭建详解
+│  ├─ speed-benchmark.md       # 性能实测与消融发现
+│  └─ week1-deploy-checklist.md
+├─ data/             # 测试资料库
+└─ models/           # GGUF 量化模型（不入库）
 ```
 
 ## 快速开始
 
-推理后端：Ollama（>= 0.34.1，原生支持 spark2_5）
-
 ```bash
-# 1) 安装 Ollama：https://ollama.com/download 下载 OllamaSetup.exe 安装
-# 2) 拉取量化模型（各一次，之后可断网运行）
-ollama pull SparkLLM/Spark-X2.5-1.7B
-ollama pull SparkLLM/Spark-X2.5-4B
-# 3) 安装应用依赖
 cd juanzong
-C:/Users/54780/.workbuddy/binaries/python/envs/default/Scripts/python.exe -m pip install -r requirements.txt
-# 4) 启动
+pip install -r requirements.txt
+
+# 终端1：启动双模型服务（需先下载 llama.cpp + GGUF，见 docs/onboarding.md）
+python scripts/start_llama_servers.py --bin "C:/llama/llama-b11026-bin-win-cuda-13.4-x64"
+
+# 终端2：启动应用
 python src/app.py
 ```
-
-应用依赖已装好的环境（venv）：`C:/Users/54780/.workbuddy/binaries/python/envs/default`
-启动应用：`C:/Users/54780/.workbuddy/binaries/python/envs/default/Scripts/python.exe src/app.py`
-
-## 第一周分工速查
-
-- 开发A：`docs/week1-deploy-checklist.md` 逐项打勾（Day5 里程碑 = 断网跑通 UI）
-- 开发B：retrieval.py / router.py 中的 TODO(B-1)~(B-4)
-- 成员C：往 `data/` 放测试案卷；等 A-5 数据出来填消融表
-- 成员D：PPT 大纲 + Demo 视频脚本
-- 成员E：2 位真实用户访谈；README/部署文档完善
