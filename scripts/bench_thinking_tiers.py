@@ -25,7 +25,7 @@ QUESTIONS = [
 
 COMBOS = [
     ("1.7B+关思考", SMALL_MODEL, SMALL_BASE_URL, Tier.LOW),
-    ("1.7B+开思考", SMALL_MODEL, SMALL_BASE_URL, Tier.HIGH),
+    ("1.7B+开思考", SMALL_MODEL, SMALL_BASE_URL, Tier.MEDIUM),
     ("4B+关思考", LARGE_MODEL, LARGE_BASE_URL, Tier.LOW),
     ("4B+开思考", LARGE_MODEL, LARGE_BASE_URL, Tier.HIGH),
 ]
