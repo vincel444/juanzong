@@ -1,11 +1,14 @@
-"""「卷宗」端侧主入口：Gradio 离线界面。
+"""「卷宗」端侧主入口：Gradio 离线界面（流式版）。
 
 启动前：
-1. 确认推理后端已运行（Ollama：`ollama serve` 或托盘程序）；
-   模型已拉取：ollama pull SparkLLM/Spark-X2.5-1.7B / Spark-X2.5-4B
+1. 启动推理后端：python scripts/start_llama_servers.py
+   （或 Ollama 路线：ollama serve + ollama pull 两个模型）
 2. .venv 激活后运行：python src/app.py
 
-演示要点：界面显示每轮回答走了哪个模型档位、时延与 token 数；回答附出处页码。
+演示要点：
+- 流式输出：思考过程与回答逐字上屏，深档 40s 不再是黑屏等待（P0-#1）
+- 溯源校验：回答逐句回查原文，未溯源句标出，提示人工复核（P0-#3）
+- 每轮回答显示档位、首字时延、总时延与 token 数
 """
 from __future__ import annotations
 
@@ -42,34 +45,89 @@ def _ping(model: str, base_url: str) -> bool:
 TIER_LABEL = {Tier.LOW: "轻档·1.7B快答", Tier.MEDIUM: "中档·1.7B推理", Tier.HIGH: "深档·4B审阅"}
 
 
-def chat_turn(question: str, history: list):
-    from router import answer
+def _render(thinking: list[str], content: list[str], notices: list[str]) -> str:
+    """把流式累积内容渲染成单条 assistant 消息。"""
+    prefix = "".join(f"> ℹ️ {n}\n\n" for n in notices)
+    thinking_acc, content_acc = "".join(thinking), "".join(content)
+    note = ""
+    if thinking_acc:
+        label = "思考中…" if not content_acc else f"思考过程（{len(thinking_acc)} 字）"
+        note = (f"<details open><summary>{label}</summary>\n\n"
+                f"{thinking_acc}\n\n</details>")
+    body = content_acc or ("思考中…" if thinking_acc else "…")
+    sep = "\n\n" if note and content_acc else ""
+    return prefix + note + sep + body
+
+
+def chat_turn_stream(question: str, history: list):
+    """流式对话轮（生成器：每收到增量就 yield 一次界面更新）。"""
+    from citation import collect_sources, summarize, verify_answer
+    from router import answer_stream
 
     if not question.strip():
-        return history, ""
+        yield history, ""
+        return
+
+    history = history + [{"role": "user", "content": question}]
+    reply_idx = len(history)
+    history = history + [{"role": "assistant", "content": "…"}]
+    yield history, ""
+
+    thinking: list[str] = []
+    content: list[str] = []
+    notices: list[str] = []
+    outcome = None
     try:
-        result, refs = answer(question)
-        cites = "、".join(sorted({f"{r.doc_name} p{r.page}" for r in refs})) or "无"
-        thinking_note = f"\n\n<details><summary>思考过程（{len(result.thinking)} 字）</summary>\n\n{result.thinking}\n\n</details>" if result.thinking else ""
-        reply = (
-            f"{result.text}\n\n---\n"
-            f"档位：{TIER_LABEL.get(result.tier, result.tier.value)}（{result.model}）｜"
-            f"时延 {result.latency_ms/1000:.1f} s｜输出 {result.eval_tokens} tok｜出处：{cites}"
-            f"{thinking_note}"
+        for kind, payload in answer_stream(question):
+            if kind == "thinking":
+                thinking.append(payload)
+            elif kind == "content":
+                content.append(payload)
+            elif kind == "notice":
+                notices.append(payload)
+            elif kind == "done":
+                outcome = payload
+            history[reply_idx] = {"role": "assistant",
+                                  "content": _render(thinking, content, notices)}
+            yield history, ""
+
+        result, refs, citation_index = outcome
+        items = verify_answer(result.text, citation_index) if result.text else []
+        total, ok, missed = summarize(items)
+        cites = "、".join(collect_sources(items)) or "无"
+
+        footer = (
+            f"\n\n---\n档位：{TIER_LABEL.get(result.tier, result.tier.value)}"
+            f"（{result.model}）｜首字 {result.first_token_ms/1000:.2f} s｜"
+            f"总时延 {result.latency_ms/1000:.1f} s｜输出 {result.eval_tokens} tok\n"
+            f"出处：{cites}｜溯源校验：{ok}/{total} 句命中原文"
         )
-        history = history + [{"role": "user", "content": question},
-                             {"role": "assistant", "content": reply}]
+        if missed:
+            pure = [m for m in missed if m.ratio < 0.01]      # 与原文完全对不上
+            partial = [m for m in missed if m.ratio >= 0.01]  # 模型综合/改写，部分命中
+            warn = []
+            if pure:
+                warn.append("未溯源: " + "；".join(m.sentence[:32] for m in pure[:3]))
+            if partial:
+                warn.append("部分溯源: " + "；".join(m.sentence[:32] for m in partial[:3]))
+            footer += "\n⚠️ 建议人工复核 —— " + " ｜ ".join(warn) + ("…" if len(missed) > 3 else "")
+        else:
+            footer += " ✅"
+
+        history[reply_idx] = {"role": "assistant",
+                              "content": _render(thinking, content, notices) + footer}
+        yield history, ""
     except Exception as e:  # 后端未启动 / 网络异常等
-        history = history + [{"role": "user", "content": question},
-                             {"role": "assistant", "content": f"调用失败：{e}\n请确认推理服务已启动。"}]
-    return history, ""
+        history[reply_idx] = {"role": "assistant",
+                              "content": f"调用失败：{e}\n请确认推理服务已启动。"}
+        yield history, ""
 
 
 with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
     gr.Markdown(
         "## 卷宗 — 隐私优先的本地长文档智能工作台\n"
         "Spark-X2.5 端侧三档自适应：轻档 1.7B 快答（<1s）→ 中档 1.7B 推理 → 深档 4B 跨文档审阅。"
-        "全程离线，数据不出设备。"
+        "全程离线，数据不出设备。回答逐句回查原文，未溯源句自动标出。"
     )
     status = gr.Textbox(label="后端状态", value="点击检测", interactive=False)
     check_btn = gr.Button("检测模型服务")
@@ -80,11 +138,11 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
         refresh_btn = gr.Button("刷新资料库")
     refresh_btn.click(refresh_docs, outputs=docs)
 
-    chatbot = gr.Chatbot(label="问答（带出处溯源）", height=420)
+    chatbot = gr.Chatbot(label="问答（流式 + 溯源校验）", height=460)
     msg = gr.Textbox(label="你的问题（问句越长/越复杂，会自动路由到 4B 深度档）")
     clear = gr.Button("清空对话")
 
-    msg.submit(chat_turn, [msg, chatbot], [chatbot, msg])
+    msg.submit(chat_turn_stream, [msg, chatbot], [chatbot, msg])
     clear.click(lambda: [], outputs=chatbot)
 
 if __name__ == "__main__":
