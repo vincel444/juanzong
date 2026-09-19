@@ -41,6 +41,9 @@ def start(bin_dir: Path, key: str, cfg: dict, ctx_override: int | None = None) -
         "-c", str(ctx_override or cfg["ctx"]),
         "-t", "8",                          # CPU 线程数（辅助）
         "--jinja",                          # 启用 Jinja 模板 → 支持 chat_template_kwargs.enable_thinking
+        "--cache-reuse", "256",             # P0-#7: KV cache 前缀复用（256 token 粒度）。
+                                            # 同卷多问时，资料段前缀命中即免重算 prompt，
+                                            # 二次提问的首字时延显著下降
         "--no-warmup",
     ]
     print(f"[启动] {key}: {' '.join(cmd)}", flush=True)
