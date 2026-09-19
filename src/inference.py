@@ -5,12 +5,17 @@
              llama-server / vLLM / SGLang），思考档位用
              chat_template_kwargs.enable_thinking
 - "ollama":  Ollama 原生 /api/chat，思考档位用 think=true/false
+
+流式：chat_stream() 以 SSE/NDJSON 逐 token 产出，深档/中档思考可"边想边看"，
+大幅缓解 4B 深档 40s 等待的体感问题（P0-#1）。
 """
 from __future__ import annotations
 
+import json
 import time
 from dataclasses import dataclass
 from enum import Enum
+from typing import Generator, Literal
 
 import requests
 
@@ -50,6 +55,7 @@ class GenResult:
     eval_tokens: int
     model: str
     tier: Tier
+    first_token_ms: int = 0  # 首个 token 到达时延（流式体验指标，非流式为 0）
 
 
 def _chat_openai(base_url: str, model: str, messages: list[dict], think: bool,
@@ -106,6 +112,105 @@ def chat(model: str, base_url: str, messages: list[dict], tier: Tier,
     return GenResult(text=text.strip(), thinking=thinking.strip(), latency_ms=latency_ms,
                      prompt_tokens=prompt_tokens, eval_tokens=eval_tokens,
                      model=model, tier=tier)
+
+
+StreamEvent = Literal["thinking", "content", "done"]
+
+
+def chat_stream(model: str, base_url: str, messages: list[dict], tier: Tier,
+                max_tokens: int = 1024
+                ) -> Generator[tuple[StreamEvent, object], None, None]:
+    """流式对话（P0-#1 深档流式输出）。
+
+    逐 delta 产出 ("thinking", 增量) 与 ("content", 增量)，
+    结束时产出 ("done", GenResult)（含完整文本与性能埋点，first_token_ms 为
+    首个可见 token 的时延，用于 UI 展示"多久开始出字"）。
+    """
+    think = think_enabled(tier)
+    start = time.perf_counter()
+    first_ms = 0
+    text_parts: list[str] = []
+    thinking_parts: list[str] = []
+    prompt_tokens = eval_tokens = 0
+
+    def touch_first():
+        nonlocal first_ms
+        if not first_ms:
+            first_ms = int((time.perf_counter() - start) * 1000)
+
+    if BACKEND_STYLE == "ollama":
+        payload = {
+            "model": model, "messages": messages, "stream": True,
+            "think": think, "options": {**GEN_KWARGS, "num_predict": max_tokens},
+        }
+        r = requests.post(f"{base_url}/api/chat", json=payload,
+                          timeout=TIMEOUT_SECONDS, stream=True)
+        r.raise_for_status()
+        for line in r.iter_lines(decode_unicode=True):
+            if not line:
+                continue
+            data = json.loads(line)
+            msg = data.get("message", {})
+            t = msg.get("thinking") or ""
+            c = msg.get("content") or ""
+            if t:
+                touch_first()
+                thinking_parts.append(t)
+                yield ("thinking", t)
+            if c:
+                touch_first()
+                text_parts.append(c)
+                yield ("content", c)
+            if data.get("done"):
+                prompt_tokens = data.get("prompt_eval_count", 0) or 0
+                eval_tokens = data.get("eval_count", 0) or 0
+    else:
+        payload = {
+            "model": model, "messages": messages, "stream": True,
+            "max_tokens": max_tokens,
+            "chat_template_kwargs": {"enable_thinking": think},
+            "stream_options": {"include_usage": True},  # llama-server: 最后 chunk 带 usage
+            **GEN_KWARGS,
+        }
+        r = requests.post(f"{base_url}/v1/chat/completions", json=payload,
+                          timeout=TIMEOUT_SECONDS, stream=True)
+        r.raise_for_status()
+        for raw in r.iter_lines(decode_unicode=True):
+            if not raw or not raw.startswith("data: "):
+                continue
+            body = raw[len("data: "):].strip()
+            if body == "[DONE]":
+                break
+            try:
+                chunk = json.loads(body)
+            except json.JSONDecodeError:
+                continue
+            usage = chunk.get("usage")
+            if usage:
+                prompt_tokens = usage.get("prompt_tokens", 0) or 0
+                eval_tokens = usage.get("completion_tokens", 0) or 0
+            choices = chunk.get("choices") or []
+            if not choices:
+                continue
+            delta = choices[0].get("delta", {}) or {}
+            t = delta.get("reasoning_content") or ""
+            c = delta.get("content") or ""
+            if t:
+                touch_first()
+                thinking_parts.append(t)
+                yield ("thinking", t)
+            if c:
+                touch_first()
+                text_parts.append(c)
+                yield ("content", c)
+
+    latency_ms = int((time.perf_counter() - start) * 1000)
+    result = GenResult(text="".join(text_parts).strip(),
+                       thinking="".join(thinking_parts).strip(),
+                       latency_ms=latency_ms, prompt_tokens=prompt_tokens,
+                       eval_tokens=eval_tokens, model=model, tier=tier,
+                       first_token_ms=first_ms)
+    yield ("done", result)
 
 
 # 三个档位的便捷入口
