@@ -1,0 +1,117 @@
+=== boot pid=36280 ts=2026-09-20 17:35:10.472 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js create 卷宗-初赛PPT.pptx ===
+[2026-09-20 17:35:10.454] [INFO ] [pid=36280] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+=== boot pid=21296 ts=2026-09-20 17:41:57.457 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/01.slide ===
+[2026-09-20 17:41:57.454] [INFO ] [pid=21296] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:41:57.530] [INFO ] [pid=21296] [slide-version] fileId=sid_mu9m version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=25056 ts=2026-09-20 17:42:02.460 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:42:02.457] [INFO ] [pid=25056] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:42:02.532] [INFO ] [pid=25056] [slide-version] fileId=sid_mu9m version=1 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=36456 ts=2026-09-20 17:42:14.733 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:42:14.731] [INFO ] [pid=36456] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:42:14.794] [INFO ] [pid=36456] [slide-version] fileId=sid_mu9m version=2 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=10236 ts=2026-09-20 17:42:39.613 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:42:39.612] [INFO ] [pid=10236] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:42:39.680] [INFO ] [pid=10236] [slide-version] fileId=sid_mu9m version=3 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=9972 ts=2026-09-20 17:44:56.139 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:44:56.137] [INFO ] [pid=9972] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:44:56.201] [INFO ] [pid=9972] [slide-version] fileId=sid_mu9m version=4 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=21320 ts=2026-09-20 17:45:14.567 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js screenshot 卷宗-初赛PPT.pptx --page-index 1 --out probe_p2.png ===
+[2026-09-20 17:45:14.564] [INFO ] [pid=21320] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:45:14.630] [INFO ] [pid=21320] [slide-version] fileId=sid_mu9m version=5 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=36140 ts=2026-09-20 17:45:30.702 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js create _probe.pptx ===
+[2026-09-20 17:45:30.700] [INFO ] [pid=36140] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+=== boot pid=35676 ts=2026-09-20 17:45:44.699 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl _probe.pptx --dsl-file slides/probe.slide ===
+[2026-09-20 17:45:44.696] [INFO ] [pid=35676] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:45:44.764] [INFO ] [pid=35676] [slide-version] fileId=F63A7FB1 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_probe.pptx
+=== boot pid=31040 ts=2026-09-20 17:46:03.463 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl _probe.pptx --dsl-file slides/probe.slide ===
+[2026-09-20 17:46:03.460] [INFO ] [pid=31040] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:46:03.536] [INFO ] [pid=31040] [slide-version] fileId=F63A7FB1 version=1 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_probe.pptx
+=== boot pid=34452 ts=2026-09-20 17:47:13.550 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:47:13.548] [INFO ] [pid=34452] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:47:13.617] [ERROR] [pid=34452] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\卷宗-初赛PPT.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\卷宗-初赛PPT.pptx"} ms=31
+[2026-09-20 17:47:13.628] [WARN ] [pid=34452] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx, trigger reopen
+[2026-09-20 17:47:13.664] [ERROR] [pid=34452] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\卷宗-初赛PPT.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\卷宗-初赛PPT.pptx"} ms=5
+[2026-09-20 17:47:13.677] [INFO ] [pid=34452] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+[2026-09-20 17:47:13.697] [INFO ] [pid=34452] [open-file] open ok fileId=A00E9FC9 fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx ms=7
+[2026-09-20 17:47:13.716] [INFO ] [pid=34452] [slide-version] fileId=A00E9FC9 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=10096 ts=2026-09-20 17:47:42.522 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl 卷宗-初赛PPT.pptx --dsl-file slides/02.slide ===
+[2026-09-20 17:47:42.519] [INFO ] [pid=10096] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:47:42.587] [INFO ] [pid=10096] [slide-version] fileId=A00E9FC9 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\卷宗-初赛PPT.pptx
+=== boot pid=30184 ts=2026-09-20 17:58:36.706 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:58:36.704] [INFO ] [pid=30184] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:58:36.770] [ERROR] [pid=30184] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=29
+[2026-09-20 17:58:36.781] [WARN ] [pid=30184] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:58:36.799] [ERROR] [pid=30184] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=5
+[2026-09-20 17:58:36.811] [INFO ] [pid=30184] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:58:36.838] [INFO ] [pid=30184] [open-file] open ok fileId=E10B71FC fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=16
+[2026-09-20 17:58:36.856] [INFO ] [pid=30184] [slide-version] fileId=E10B71FC version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=15656 ts=2026-09-20 17:58:41.347 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:58:41.345] [INFO ] [pid=15656] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:58:41.412] [ERROR] [pid=15656] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=30
+[2026-09-20 17:58:41.423] [WARN ] [pid=15656] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:58:41.441] [ERROR] [pid=15656] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=5
+[2026-09-20 17:58:41.471] [INFO ] [pid=15656] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:58:41.491] [INFO ] [pid=15656] [open-file] open ok fileId=3EDF4DEF fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=7
+[2026-09-20 17:58:41.509] [INFO ] [pid=15656] [slide-version] fileId=3EDF4DEF version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=21184 ts=2026-09-20 17:58:46.012 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:58:46.010] [INFO ] [pid=21184] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:58:46.078] [ERROR] [pid=21184] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=29
+[2026-09-20 17:58:46.090] [WARN ] [pid=21184] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:58:46.129] [ERROR] [pid=21184] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=8
+[2026-09-20 17:58:46.141] [INFO ] [pid=21184] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:58:46.162] [INFO ] [pid=21184] [open-file] open ok fileId=6FAC3183 fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=8
+[2026-09-20 17:58:46.179] [INFO ] [pid=21184] [slide-version] fileId=6FAC3183 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=31364 ts=2026-09-20 17:59:18.256 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:59:18.254] [INFO ] [pid=31364] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:59:18.320] [ERROR] [pid=31364] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=29
+[2026-09-20 17:59:18.332] [WARN ] [pid=31364] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:59:18.348] [ERROR] [pid=31364] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=4
+[2026-09-20 17:59:18.377] [INFO ] [pid=31364] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:59:18.394] [INFO ] [pid=31364] [open-file] open ok fileId=6CD3A28D fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=5
+[2026-09-20 17:59:18.410] [INFO ] [pid=31364] [slide-version] fileId=6CD3A28D version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=24228 ts=2026-09-20 17:59:29.074 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:59:29.072] [INFO ] [pid=24228] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:59:29.139] [ERROR] [pid=24228] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=28
+[2026-09-20 17:59:29.149] [WARN ] [pid=24228] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:59:29.167] [ERROR] [pid=24228] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=4
+[2026-09-20 17:59:29.183] [INFO ] [pid=24228] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:59:29.203] [INFO ] [pid=24228] [open-file] open ok fileId=DA41E78B fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=7
+[2026-09-20 17:59:29.220] [INFO ] [pid=24228] [slide-version] fileId=DA41E78B version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=31812 ts=2026-09-20 17:59:39.860 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 17:59:39.858] [INFO ] [pid=31812] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 17:59:39.922] [ERROR] [pid=31812] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=28
+[2026-09-20 17:59:39.933] [WARN ] [pid=31812] [slide-version] no editor for filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx, trigger reopen
+[2026-09-20 17:59:39.949] [ERROR] [pid=31812] [http] editorStatus http 404 url=http://127.0.0.1:39099/localapi/editor/status req={"file_path":"G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} resp={"code":-1,"message":"no editor open for file_path=G:\\私\\新建文件夹\\星火ai应用\\juanzong\\ppt-review\\_build.pptx"} ms=4
+[2026-09-20 17:59:39.960] [INFO ] [pid=31812] [open-file] open send url=http://127.0.0.1:39099/localapi/open filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+[2026-09-20 17:59:39.981] [INFO ] [pid=31812] [open-file] open ok fileId=4B000126 fileType=slide filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx ms=10
+[2026-09-20 17:59:39.999] [INFO ] [pid=31812] [slide-version] fileId=4B000126 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=13276 ts=2026-09-20 18:00:22.049 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\03.slide ===
+[2026-09-20 18:00:22.046] [INFO ] [pid=13276] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:00:22.118] [INFO ] [pid=13276] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=32872 ts=2026-09-20 18:00:44.532 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\04.slide ===
+[2026-09-20 18:00:44.530] [INFO ] [pid=32872] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:00:44.598] [INFO ] [pid=32872] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_build.pptx
+=== boot pid=25056 ts=2026-09-20 18:02:49.899 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w5.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\05.slide ===
+[2026-09-20 18:02:49.897] [INFO ] [pid=25056] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:02:49.967] [INFO ] [pid=25056] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w5.pptx
+=== boot pid=31288 ts=2026-09-20 18:03:04.824 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w6.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\06.slide ===
+[2026-09-20 18:03:04.818] [INFO ] [pid=31288] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:03:04.908] [INFO ] [pid=31288] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w6.pptx
+=== boot pid=34872 ts=2026-09-20 18:03:20.236 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w7.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\07.slide ===
+[2026-09-20 18:03:20.234] [INFO ] [pid=34872] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:03:20.303] [INFO ] [pid=34872] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w7.pptx
+=== boot pid=26224 ts=2026-09-20 18:03:35.783 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w8.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\08.slide ===
+[2026-09-20 18:03:35.780] [INFO ] [pid=26224] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:03:36.131] [INFO ] [pid=26224] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w8.pptx
+=== boot pid=30708 ts=2026-09-20 18:04:11.570 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w9.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\09.slide ===
+[2026-09-20 18:04:11.568] [INFO ] [pid=30708] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:04:11.635] [INFO ] [pid=30708] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w9.pptx
+=== boot pid=8780 ts=2026-09-20 18:04:26.868 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w10.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\10.slide ===
+[2026-09-20 18:04:26.866] [INFO ] [pid=8780] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:04:27.395] [INFO ] [pid=8780] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w10.pptx
+=== boot pid=4680 ts=2026-09-20 18:04:45.245 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w11.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\11.slide ===
+[2026-09-20 18:04:45.242] [INFO ] [pid=4680] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:04:45.314] [INFO ] [pid=4680] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w11.pptx
+=== boot pid=35324 ts=2026-09-20 18:05:01.127 cwd=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review argv=C:\Users\54780\.workbuddy\binaries\node\versions\22.22.2-3\node_modules\@tencent\slidep\dist\slidep.js upsert-dsl G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w12.pptx --dsl-file G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\slides\12.slide ===
+[2026-09-20 18:05:01.124] [INFO ] [pid=35324] [server-url] baseUrl=http://127.0.0.1:39099 source=env
+[2026-09-20 18:05:01.215] [INFO ] [pid=35324] [slide-version] fileId=G:\私\新建文 version=0 filePath=G:\私\新建文件夹\星火ai应用\juanzong\ppt-review\_w12.pptx

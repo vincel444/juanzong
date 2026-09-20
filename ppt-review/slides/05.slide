@@ -1,0 +1,59 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>三档自适应 + 流式输出</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>03 · 怎么做到的</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'row', gap: 30, marginTop: 16 }}>
+    <Box style={{ flex: 1, flexDirection: 'column', gap: 16 }}>
+      <Table
+        style={{ width: '100%', height: 262 }}
+        defaultTextStyle={{ fontSize: 17, textAlign: 'center', color: '#F1F5F9' }}
+        defaultCellStyle={{
+          border: {
+            left: { width: 1, color: '#334155' },
+            right: { width: 1, color: '#334155' },
+            top: { width: 1, color: '#334155' },
+            bottom: { width: 1, color: '#334155' },
+          },
+        }}
+        cells={[
+          [
+            { text: '档位', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: '模型 · 思考', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: '端侧时延', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: '适用场景', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+          ],
+          ['轻档', '1.7B · 关思考', '0.4–0.9s', '快问快答、术语解释'],
+          [{ text: '中档', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '1.7B · 开思考', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '约 2s', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '单条款分析', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }],
+          ['深档', { text: '4B · 开思考', textStyle: { color: '#06B6D4' } }, { text: '39–48s', textStyle: { color: '#06B6D4' } }, '跨条款审阅、矛盾核查'],
+        ]}
+      />
+      <Text style={{ fontSize: 16, color: '#94A3B8', lineHeight: 1.6 }}>路由按问题复杂度自动选档，用户可手动指定；思考档位由 chat template 的 enable_thinking 开关驱动。</Text>
+      <Box style={{ background: '#1E293B', borderRadius: 10, paddingTop: 14, paddingBottom: 14, paddingLeft: 18, paddingRight: 18, borderLeft: '3px solid #F59E0B' }}>
+        <Text style={{ fontSize: 16, color: '#F1F5F9', lineHeight: 1.6 }}><span style={{ fontWeight: 'bold', color: '#F59E0B' }}>智能降级：</span>1.7B 开思考超限无正文时，自动关思考重试——快答永不空手而归。</Text>
+      </Box>
+    </Box>
+    <Box style={{ width: 430, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <svg width={430} height={280} viewBox='0 0 430 280' font-family='sans-serif'>
+        <text x='14' y='30' fill='#F1F5F9' font-size='17' font-weight='bold'>流式输出时序</text>
+        <text x='14' y='62' fill='#94A3B8' font-size='13'>深档 4B · 一整卷审阅</text>
+        <text x='14' y='104' fill='#94A3B8' font-size='14'>思考流</text>
+        <rect x='78' y='88' width='330' height='24' rx='6' fill='rgba(59,130,246,0.30)' />
+        <text x='92' y='105' fill='#94A3B8' font-size='13'>推理可见、可折叠，随时能看懂它在想什么</text>
+        <text x='14' y='152' fill='#94A3B8' font-size='14'>正文流</text>
+        <rect x='78' y='136' width='330' height='24' rx='6' fill='rgba(6,182,212,0.55)' />
+        <path d='M78 168 v18 m-6 -8 l6 8 l6 -8' stroke='#06B6D4' stroke-width='2' fill='none' />
+        <circle cx='78' cy='136' r='5' fill='#06B6D4' />
+        <text x='92' y='196' fill='#06B6D4' font-size='13'>首字 &lt; 1s，边想边写，40s 任务不再黑屏</text>
+        <line x1='78' y1='216' x2='408' y2='216' stroke='#334155' stroke-width='1.5' />
+        <text x='78' y='238' fill='#94A3B8' font-size='12'>0s</text>
+        <text x='392' y='238' fill='#94A3B8' font-size='12'>40s+</text>
+        <text x='14' y='268' fill='#94A3B8' font-size='13'>轻档 / 中档：思考流极短，正文几乎立即开始</text>
+      </svg>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>05 / 12</Text>
+  </Box>
+</Slide>

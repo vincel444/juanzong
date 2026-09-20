@@ -1,0 +1,57 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>三档时延与端侧工程细节</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>05 · 端侧实测</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'column', gap: 16, marginTop: 16 }}>
+    <Table
+      style={{ width: '100%', height: 186 }}
+      defaultTextStyle={{ fontSize: 17, textAlign: 'center', color: '#F1F5F9' }}
+      defaultCellStyle={{
+        border: {
+          left: { width: 1, color: '#334155' },
+          right: { width: 1, color: '#334155' },
+          top: { width: 1, color: '#334155' },
+          bottom: { width: 1, color: '#334155' },
+        },
+      }}
+      cells={[
+        [
+          { text: '档位', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '首字时延', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '总时延', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '体感保障', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+        ],
+        ['轻档', { text: '0.4s', textStyle: { bold: true, color: '#06B6D4' } }, '0.4–0.9s', '即问即答'],
+        [{ text: '中档', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '约 0.5s', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '约 2.0s', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }, { text: '含降级兜底，无感等待', cellStyle: { background: { color: 'rgba(59,130,246,0.08)' } } }],
+        ['深档', { text: '< 1s', textStyle: { bold: true, color: '#06B6D4' } }, { text: '39–48s', textStyle: { bold: true, color: '#F59E0B' } }, '思考与正文流式上屏，不黑屏'],
+      ]}
+    />
+    <Box style={{ flex: 1, flexDirection: 'row', gap: 28, alignItems: 'center' }}>
+      <Box style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <Image src="assets/eng_bg.png" style={{ width: 470, height: 296, borderRadius: 12 }} />
+      </Box>
+      <Box style={{ flexDirection: 'column', gap: 8, justifyContent: 'center' }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Box style={{ width: 10, height: 10, borderRadius: 5, background: '#3B82F6' }} />
+          <Text style={{ fontSize: 15, color: '#F1F5F9' }}><span style={{ fontFamily: 'JetBrains Mono, Consolas, monospace', color: '#06B6D4' }}>-ngl 99</span>　全部层卸载到 GPU，CPU 只做调度</Text>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Box style={{ width: 10, height: 10, borderRadius: 5, background: '#3B82F6' }} />
+          <Text style={{ fontSize: 15, color: '#F1F5F9' }}><span style={{ fontFamily: 'JetBrains Mono, Consolas, monospace', color: '#06B6D4' }}>--jinja</span>　启用思考档位开关（enable_thinking）</Text>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
+          <Box style={{ width: 10, height: 10, borderRadius: 5, background: '#3B82F6' }} />
+          <Text style={{ fontSize: 15, color: '#F1F5F9' }}><span style={{ fontFamily: 'JetBrains Mono, Consolas, monospace', color: '#06B6D4' }}>--cache-reuse 256</span>　同卷多问复用 KV，免重复预填</Text>
+        </Box>
+        <Box style={{ background: 'rgba(245,158,11,0.08)', borderLeft: '3px solid #F59E0B', borderRadius: 6, paddingTop: 10, paddingBottom: 10, paddingLeft: 14, paddingRight: 14 }}>
+          <Text style={{ fontSize: 14, color: '#F1F5F9', lineHeight: 1.55 }}><span style={{ fontWeight: 'bold', color: '#F59E0B' }}>如实说明：</span>深档 40s 是 4B 在 8GB 显卡上的物理上限——如实标注，用流式与路由缓解体感。</Text>
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>08 / 12</Text>
+  </Box>
+</Slide>

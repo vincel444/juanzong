@@ -1,0 +1,56 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>规划与原创性声明</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>09 · 规划与声明</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'column', gap: 18, marginTop: 16 }}>
+    <svg width={1136} height={150} viewBox='0 0 1136 150' font-family='sans-serif'>
+      <line x1='60' y1='80' x2='1080' y2='80' stroke='#334155' stroke-width='2' />
+      <circle cx='120' cy='80' r='9' fill='#06B6D4' />
+      <text x='120' y='52' fill='#F1F5F9' font-size='16' font-weight='bold' text-anchor='middle'>核心闭环已打通</text>
+      <text x='120' y='112' fill='#94A3B8' font-size='13' text-anchor='middle'>9 月中：部署 · 三档 · 溯源 · 实测</text>
+      <circle cx='420' cy='80' r='9' fill='#3B82F6' />
+      <circle cx='420' cy='80' r='15' fill='none' stroke='#3B82F6' stroke-width='1.5' opacity='0.5' />
+      <text x='420' y='52' fill='#3B82F6' font-size='16' font-weight='bold' text-anchor='middle'>初赛材料提交</text>
+      <text x='420' y='112' fill='#94A3B8' font-size='13' text-anchor='middle'>10 月上旬：PPT · 演示视频 · 打包</text>
+      <circle cx='720' cy='80' r='9' fill='#94A3B8' />
+      <text x='720' y='52' fill='#F1F5F9' font-size='16' font-weight='bold' text-anchor='middle'>初赛评审</text>
+      <text x='720' y='112' fill='#94A3B8' font-size='13' text-anchor='middle'>10-11 截止 · 前 10 名晋级</text>
+      <circle cx='1020' cy='80' r='9' fill='#94A3B8' />
+      <text x='1020' y='52' fill='#F1F5F9' font-size='16' font-weight='bold' text-anchor='middle'>决赛</text>
+      <text x='1020' y='112' fill='#94A3B8' font-size='13' text-anchor='middle'>11 月 · 现场答辩</text>
+    </svg>
+    <Box style={{ flex: 1, flexDirection: 'row', gap: 24 }}>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 12, paddingTop: 20, paddingBottom: 20, paddingLeft: 22, paddingRight: 22 }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#3B82F6' }}>决赛规划</Text>
+        <Box style={{ marginTop: 14, gap: 12 }}>
+          <Box style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Box style={{ width: 7, height: 7, borderRadius: 4, background: '#3B82F6' }} />
+            <Text style={{ fontSize: 16, color: '#F1F5F9' }}>混合检索升级：向量 + BM25，超长卷召回更准</Text>
+          </Box>
+          <Box style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Box style={{ width: 7, height: 7, borderRadius: 4, background: '#3B82F6' }} />
+            <Text style={{ fontSize: 16, color: '#F1F5F9' }}>智能路由调优：按题自动选档的阈值学习</Text>
+          </Box>
+          <Box style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Box style={{ width: 7, height: 7, borderRadius: 4, background: '#3B82F6' }} />
+            <Text style={{ fontSize: 16, color: '#F1F5F9' }}>超长卷宗分级装载：摘要 + 原文两级上下文</Text>
+          </Box>
+          <Box style={{ flexDirection: 'row', gap: 10, alignItems: 'center' }}>
+            <Box style={{ width: 7, height: 7, borderRadius: 4, background: '#94A3B8' }} />
+            <Text style={{ fontSize: 16, color: '#94A3B8' }}>扫描件 OCR：列为探索项，视评审反馈决定</Text>
+          </Box>
+        </Box>
+      </Box>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 12, paddingTop: 20, paddingBottom: 20, paddingLeft: 22, paddingRight: 22 }}>
+        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#06B6D4' }}>原创性声明</Text>
+        <Text style={{ fontSize: 15, color: '#94A3B8', marginTop: 14, lineHeight: 1.75 }}>本作品基于讯飞官方开源 Spark-X2.5 模型开发，应用代码为团队原创。llama.cpp（推理）、Gradio（界面）、fpdf2（测试集生成）、matplotlib（图表）等第三方开源组件均如实标注。访谈画像为 AI 模拟并已标注；全部性能数据来自真机实测，可在仓库复查。</Text>
+      </Box>
+    </Box>
+    <Text style={{ fontSize: 16, color: '#F1F5F9', textAlign: 'center', marginBottom: 4 }}>卷宗——让每一句回答都能回查到页码。谢谢评审！</Text>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>12 / 12</Text>
+  </Box>
+</Slide>

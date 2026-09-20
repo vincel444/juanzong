@@ -1,0 +1,41 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>痛点：隐私与效率的二选一</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>02 · 为什么是现在</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'row', gap: 32, marginTop: 16 }}>
+    <Box style={{ width: 470, flexDirection: 'column', gap: 14 }}>
+      <Box style={{ background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 20, paddingRight: 20 }}>
+        <Text style={{ fontSize: 19, fontStyle: 'italic', color: '#F1F5F9', lineHeight: 1.5 }}>「公司合同里有报价、账期，网页版 AI 一律不敢用」</Text>
+        <Text style={{ fontSize: 14, color: '#94A3B8', marginTop: 8 }}>—— 模拟访谈 · 中小企业采购（AI 画像）</Text>
+      </Box>
+      <Box style={{ background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 20, paddingRight: 20 }}>
+        <Text style={{ fontSize: 19, fontStyle: 'italic', color: '#F1F5F9', lineHeight: 1.5 }}>「AI 说得再好，指不出第几页我就不敢信」</Text>
+        <Text style={{ fontSize: 14, color: '#94A3B8', marginTop: 8 }}>—— 模拟访谈 · 法务助理（AI 画像）</Text>
+      </Box>
+      <Box style={{ background: 'rgba(59,130,246,0.08)', borderRadius: 10, paddingTop: 14, paddingBottom: 14, paddingLeft: 20, paddingRight: 20, gap: 10 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Box style={{ width: 8, height: 8, borderRadius: 4, background: '#3B82F6' }} />
+          <Text style={{ fontSize: 17, color: '#F1F5F9' }}>云端大模型：能力强，但敏感合同出本机 = 合规风险</Text>
+        </Box>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+          <Box style={{ width: 8, height: 8, borderRadius: 4, background: '#94A3B8' }} />
+          <Text style={{ fontSize: 17, color: '#F1F5F9' }}>本地小模型：数据不出网，但装不下长文档、读不完整卷</Text>
+        </Box>
+      </Box>
+      <Box style={{ borderLeft: '3px solid #3B82F6', background: 'rgba(59,130,246,0.08)', borderRadius: 6, paddingTop: 14, paddingBottom: 14, paddingLeft: 18, paddingRight: 18 }}>
+        <Text style={{ fontSize: 18, color: '#F1F5F9', lineHeight: 1.6 }}>
+          <span style={{ fontWeight: 'bold', color: '#3B82F6' }}>缺口：</span>端侧 1M 上下文 + 可验证引用，同时成立的产品此前不存在
+        </Text>
+      </Box>
+    </Box>
+    <Box style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Image src="assets/pain_bg.png" style={{ width: 560, height: 352, borderRadius: 12 }} />
+      <Text style={{ fontSize: 15, color: '#94A3B8', marginTop: 16, textAlign: 'center' }}>上云：数据合规风险　｜　本机小模型：装不下整卷</Text>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>03 / 12</Text>
+  </Box>
+</Slide>

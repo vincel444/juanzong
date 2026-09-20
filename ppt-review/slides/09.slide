@@ -1,0 +1,50 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>模型核心贡献：消融实验</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>06 · 模型贡献</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'row', gap: 32, marginTop: 16 }}>
+    <Box style={{ width: 500, flexDirection: 'column', gap: 14, justifyContent: 'center' }}>
+      <Table
+        style={{ width: '100%', height: 232 }}
+        defaultTextStyle={{ fontSize: 16, textAlign: 'center', color: '#F1F5F9' }}
+        defaultCellStyle={{
+          border: {
+            left: { width: 1, color: '#334155' },
+            right: { width: 1, color: '#334155' },
+            top: { width: 1, color: '#334155' },
+            bottom: { width: 1, color: '#334155' },
+          },
+        }}
+        cells={[
+          [
+            { text: '模型 ＼ 思考', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: '关思考', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: '开思考', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+          ],
+          ['1.7B', { text: '134 tok/s 轻快', textStyle: { color: '#06B6D4' } }, { text: '思考 5027 字 · 回答 0 字', textStyle: { bold: true, color: '#F59E0B' } }],
+          ['4B', '63 tok/s 基线', { text: '思考 3073 · 回答 1311（深档）', textStyle: { color: '#06B6D4' } }],
+        ]}
+      />
+      <Text style={{ fontSize: 14, color: '#94A3B8' }}>同卷同问实测 · 2026-09-18 · 预算上限 4096 token</Text>
+      <Box style={{ borderLeft: '3px solid #06B6D4', background: 'rgba(6,182,212,0.08)', borderRadius: 6, paddingTop: 14, paddingBottom: 14, paddingLeft: 18, paddingRight: 18 }}>
+        <Text style={{ fontSize: 18, color: '#F1F5F9', lineHeight: 1.6 }}>
+          <span style={{ fontWeight: 'bold', color: '#06B6D4' }}>结论：</span>小模型不适合长思考档——双模型分工是端侧的最优解
+        </Text>
+      </Box>
+    </Box>
+    <Box style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', gap: 8 }}>
+      <Text style={{ fontSize: 88, fontWeight: 'bold', color: '#F59E0B', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', lineHeight: 1.0 }}>5027 字</Text>
+      <Text style={{ fontSize: 20, color: '#94A3B8' }}>1.7B 开思考：一路「想」个不停，耗尽输出预算</Text>
+      <Text style={{ fontSize: 120, fontWeight: 'bold', color: '#F1F5F9', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', lineHeight: 1.05, marginTop: 10 }}>0 字</Text>
+      <Text style={{ fontSize: 20, color: '#94A3B8' }}>正式回答一个字都没输出</Text>
+      <Box style={{ marginTop: 14, background: '#1E293B', borderRadius: 10, paddingTop: 14, paddingBottom: 14, paddingLeft: 18, paddingRight: 18 }}>
+        <Text style={{ fontSize: 17, color: '#F1F5F9', lineHeight: 1.6 }}><span style={{ fontWeight: 'bold', color: '#3B82F6' }}>深档必须用 4B</span>——这是实验证据，不是主观选择</Text>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>09 / 12</Text>
+  </Box>
+</Slide>

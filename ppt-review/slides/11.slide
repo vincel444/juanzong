@@ -1,0 +1,55 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>团队分工</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>08 · 团队</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'column', gap: 14, marginTop: 16 }}>
+    <Text style={{ fontSize: 17, color: '#94A3B8', lineHeight: 1.6 }}>5 人团队，2 人有代码基础。范围收缩策略：只做 Windows PC 单端，UI 用现成组件，把有限人力押在「三档路由 + 溯源校验」两条主线上。</Text>
+    <Box style={{ flex: 1, flexDirection: 'row', gap: 14 }}>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 16, paddingRight: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <FAIcon name='star' style={{ fill: '#F59E0B', width: 22, height: 22 }} />
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#F1F5F9' }}>队长</Text>
+        </Box>
+        <Text style={{ fontSize: 14, color: '#3B82F6', marginTop: 4 }}>产品与架构</Text>
+        <Text style={{ fontSize: 13.5, color: '#94A3B8', marginTop: 10, lineHeight: 1.6 }}>定「离线整卷 + 逐句回查页码」的主张与范围收缩，拍板三档路由与溯源两条主线；统筹进度与风险，负责整体架构与材料口径，确保每个演示数字都能回溯到实测记录。</Text>
+      </Box>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 16, paddingRight: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <FAIcon name='cog' style={{ fill: '#3B82F6', width: 22, height: 22 }} />
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#F1F5F9' }}>开发 A</Text>
+        </Box>
+        <Text style={{ fontSize: 14, color: '#3B82F6', marginTop: 4 }}>推理与路由</Text>
+        <Text style={{ fontSize: 13.5, color: '#94A3B8', marginTop: 10, lineHeight: 1.6 }}>负责 llama.cpp 量化部署与双模型同驻调优：全层卸载、KV 前缀复用、显存预算；实现三档路由与智能降级，产出基准测试脚本与全部实测数据。</Text>
+      </Box>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 16, paddingRight: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <FAIcon name='edit' style={{ fill: '#3B82F6', width: 22, height: 22 }} />
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#F1F5F9' }}>开发 B</Text>
+        </Box>
+        <Text style={{ fontSize: 14, color: '#3B82F6', marginTop: 4 }}>溯源与工作台</Text>
+        <Text style={{ fontSize: 13.5, color: '#94A3B8', marginTop: 10, lineHeight: 1.6 }}>实现流式输出与 Gradio 工作台：思考折叠、页码标注、分级提示；负责 8-gram 溯源校验、页码定位与标题前缀剥离优化，维护溯源回归用例。</Text>
+      </Box>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 16, paddingRight: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <FAIcon name='clipboard' style={{ fill: '#06B6D4', width: 22, height: 22 }} />
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#F1F5F9' }}>成员 C</Text>
+        </Box>
+        <Text style={{ fontSize: 14, color: '#06B6D4', marginTop: 4 }}>测试与语料</Text>
+        <Text style={{ fontSize: 13.5, color: '#94A3B8', marginTop: 10, lineHeight: 1.6 }}>构造含考核点的合同测试集，覆盖试用期超限、工资矛盾、解约冲突、质保期不一致等场景；执行端到端回归，逐项记录考核点的页码定位结果。</Text>
+      </Box>
+      <Box style={{ flex: 1, background: '#1E293B', borderRadius: 10, paddingTop: 16, paddingBottom: 16, paddingLeft: 16, paddingRight: 16 }}>
+        <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+          <FAIcon name='users' style={{ fill: '#06B6D4', width: 22, height: 22 }} />
+          <Text style={{ fontSize: 17, fontWeight: 'bold', color: '#F1F5F9' }}>成员 E</Text>
+        </Box>
+        <Text style={{ fontSize: 14, color: '#06B6D4', marginTop: 4 }}>调研与验证</Text>
+        <Text style={{ fontSize: 13.5, color: '#94A3B8', marginTop: 10, lineHeight: 1.6 }}>整理目标用户访谈提纲与痛点清单，核对痛点与产品特性的对应关系；参与演示评审，从非技术视角提出可读性与表达改进。</Text>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>11 / 12</Text>
+  </Box>
+</Slide>

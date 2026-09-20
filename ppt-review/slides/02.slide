@@ -1,0 +1,41 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>一句话主张</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>01 · 我们做什么</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'row', gap: 40, marginTop: 16, alignItems: 'center' }}>
+    <Box style={{ width: 430 }}>
+      <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#F1F5F9', lineHeight: 1.55 }}>
+        在 <span style={{ color: '#3B82F6' }}>8GB 显存</span>的笔记本上，完全离线装下<span style={{ color: '#06B6D4' }}>整卷合同</span>，逐句回查原文<span style={{ color: '#06B6D4' }}>页码</span>
+      </Text>
+      <Text style={{ fontSize: 20, color: '#94A3B8', marginTop: 26, lineHeight: 1.75 }}>基于 Spark-X2.5 双模型（1.7B 常驻快答 + 4B 按需深审）与三档自适应路由；每句回答经 8-gram 溯源校验，标注可核查页码。</Text>
+    </Box>
+    <Box style={{ flex: 1, flexDirection: 'column', gap: 18 }}>
+      <Box style={{ height: 158, background: '#1E293B', borderRadius: 12, flexDirection: 'row', alignItems: 'center', paddingLeft: 32, paddingRight: 28, gap: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#3B82F6', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', width: 240 }}>8 GB</Text>
+        <Box style={{ flex: 1 }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#F1F5F9' }}>显存即可跑</Text>
+          <Text style={{ fontSize: 17, color: '#94A3B8', marginTop: 6, lineHeight: 1.5 }}>1.7B + 4B 双模型同驻仅 5.5GB，消费级笔记本无需升级硬件</Text>
+        </Box>
+      </Box>
+      <Box style={{ height: 158, background: '#1E293B', borderRadius: 12, flexDirection: 'row', alignItems: 'center', paddingLeft: 32, paddingRight: 28, gap: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#06B6D4', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', width: 240 }}>134</Text>
+        <Box style={{ flex: 1 }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#F1F5F9' }}>tok/s 端侧推理速度</Text>
+          <Text style={{ fontSize: 17, color: '#94A3B8', marginTop: 6, lineHeight: 1.5 }}>1.7B Q4_K_M 量化 + GPU 全层卸载，比原始方案快 35–60 倍</Text>
+        </Box>
+      </Box>
+      <Box style={{ height: 158, background: '#1E293B', borderRadius: 12, flexDirection: 'row', alignItems: 'center', paddingLeft: 32, paddingRight: 28, gap: 24, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
+        <Text style={{ fontSize: 84, fontWeight: 'bold', color: '#F59E0B', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', width: 240 }}>0</Text>
+        <Box style={{ flex: 1 }}>
+          <Text style={{ fontSize: 22, fontWeight: 'bold', color: '#F1F5F9' }}>字节数据出设备</Text>
+          <Text style={{ fontSize: 17, color: '#94A3B8', marginTop: 6, lineHeight: 1.5 }}>全程本地推理，飞行模式可跑，敏感合同不出本机</Text>
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>02 / 12</Text>
+  </Box>
+</Slide>

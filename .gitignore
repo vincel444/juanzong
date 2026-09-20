@@ -4,15 +4,21 @@ __pycache__/
 .venv/
 venv/
 
-# 模型权重与工具（体积大，不入库）
+# 模型权重（体积大，不入库）
 models/
-tools/
 *.gguf
 *.safetensors
 
-# 运行时产物
+# 运行时产物（索引 / OCR 缓存）
 data/index.sqlite
-docs/bench_result.csv
+data/index/
+
+# PPT 构建临时文件
+ppt-review/_w*.pptx
+ppt-review/.tx_export_tmp_*
+ppt-review/_build*
+ppt-review/_probe*
+ppt-review/_savedas*
 
 # IDE / 系统
 .idea/

@@ -1,13 +1,103 @@
-"""本地资料解析与检索（文本 / PDF / Word）。
+"""本地资料解析与检索（文本 / PDF / Word / 扫描版 PDF-OCR）。
 
 设计目标：整卷资料尽量直接塞进 1M 上下文；检索作为内存不足时的兜底召回。
+
+扫描版 PDF：pypdf 抽不到文本层的页面（图片型/扫描件）自动走 RapidOCR
+（CPU，onnxruntime，不占用推理 GPU），结果按文件哈希缓存到磁盘，
+同一份文件只有第一次装载有 OCR 开销。
 """
 from __future__ import annotations
 
+import hashlib
+import json
+import re
+import threading
 from dataclasses import dataclass
 from pathlib import Path
 
 from config import DATA_DIR, INDEX_PATH
+
+# ---- 扫描页 OCR ----
+OCR_DIR = INDEX_PATH.parent / "ocr_cache"
+_TEXT_FLOOR = 20          # 页规范化文本低于该字符数 → 判定扫描页
+_OCR_DPI = 260            # 渲染分辨率：清晰度与速度折中
+
+_ocr_engine = None
+_ocr_lock = threading.Lock()
+
+
+def _get_ocr():
+    """RapidOCR 懒加载单例（首次调用约 2~4s 模型初始化）。"""
+    global _ocr_engine
+    if _ocr_engine is None:
+        with _ocr_lock:
+            if _ocr_engine is None:
+                from rapidocr_onnxruntime import RapidOCR
+                _ocr_engine = RapidOCR()
+    return _ocr_engine
+
+
+def _file_key(path: Path) -> str:
+    st = path.stat()
+    return hashlib.md5(f"{path.name}|{st.st_size}|{st.st_mtime_ns}".encode()).hexdigest()
+
+
+def _ocr_cache_load(path: Path) -> dict[int, str] | None:
+    f = OCR_DIR / f"{_file_key(path)}.json"
+    if not f.exists():
+        return None
+    try:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        return {int(k): v for k, v in data.get("pages", {}).items()}
+    except Exception:
+        return None
+
+
+def _ocr_cache_save(path: Path, pages: dict[int, str]) -> None:
+    try:
+        OCR_DIR.mkdir(parents=True, exist_ok=True)
+        (OCR_DIR / f"{_file_key(path)}.json").write_text(
+            json.dumps({"pages": {str(k): v for k, v in pages.items()}},
+                       ensure_ascii=False),
+            encoding="utf-8")
+    except Exception:
+        pass  # 缓存失败不阻塞主流程
+
+
+def _render_page(path: Path, page_no: int):
+    """用 PyMuPDF 把指定页渲染成 RGB numpy 数组。"""
+    try:
+        import pymupdf as fitz
+    except ImportError:  # 旧版 PyMuPDF 兼容
+        import fitz
+    import numpy as np
+
+    with fitz.Document(str(path)) as doc:
+        pix = doc[page_no - 1].get_pixmap(dpi=_OCR_DPI)
+        img = np.frombuffer(pix.samples, dtype=np.uint8).reshape(
+            pix.height, pix.width, pix.n)
+        return img[:, :, :3] if pix.n == 4 else img
+
+
+def _ocr_page(path: Path, page_no: int) -> str:
+    result, _ = _get_ocr()(_render_page(path, page_no))
+    if not result:
+        return ""
+    return "\n".join(r[1] for r in result)
+
+
+def ocr_info(path: Path) -> str:
+    """资料卡展示用：该 PDF 的文字/扫描状态一句话标记。"""
+    cached = _ocr_cache_load(path)
+    if cached:
+        return f"已 OCR {len(cached)} 页"
+    try:
+        from pypdf import PdfReader
+        t = PdfReader(str(path)).pages[0].extract_text() or ""
+        plain = re.sub(r"\s+", "", t)
+        return "文字版" if len(plain) >= _TEXT_FLOOR else "扫描版·问答时自动OCR"
+    except Exception:
+        return "—"
 
 
 @dataclass
@@ -67,16 +157,44 @@ def scan_documents() -> list[Path]:
 
 
 def _extract_pdf(path: Path) -> list[str]:
-    """PDF 按页提取文本。"""
+    """PDF 按页提取文本。
+
+    文字页走 pypdf 零开销；扫描页（无文本层）自动 RapidOCR（CPU），
+    结果按文件哈希缓存 —— 同一份文件只有首次装载有 OCR 时间成本。
+    """
     from pypdf import PdfReader
 
+    cached = _ocr_cache_load(path)
     reader = PdfReader(str(path))
-    pages = []
-    for page in reader.pages:
+    pages: list[str] = []
+    ocr_todo: list[int] = []
+    for i, page in enumerate(reader.pages, start=1):
+        if cached and i in cached:
+            pages.append(cached[i])
+            continue
         try:
-            pages.append(page.extract_text() or "")
+            text = page.extract_text() or ""
         except Exception:
-            pages.append("")
+            text = ""
+        if len(re.sub(r"\s+", "", text)) >= _TEXT_FLOOR:
+            pages.append(text)
+        else:
+            ocr_todo.append(i)
+            pages.append("")  # 占位，OCR 后回填
+
+    if ocr_todo:
+        try:
+            for i in ocr_todo:
+                pages[i - 1] = _ocr_page(path, i)
+            merged = dict(cached or {})
+            for i in ocr_todo:
+                merged[i] = pages[i - 1]
+            _ocr_cache_save(path, merged)
+        except Exception as e:
+            # OCR 失败不阻塞建索引：占位说明，保证其余页可用
+            for i in ocr_todo:
+                if not pages[i - 1]:
+                    pages[i - 1] = f"[第{i}页为扫描页，OCR 失败: {e}]"
     return pages
 
 

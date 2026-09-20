@@ -1,0 +1,47 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>端侧实测：跑得动吗</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>05 · 端侧实测</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'row', gap: 28, marginTop: 16 }}>
+    <Box style={{ width: 420, flexDirection: 'column', gap: 14, justifyContent: 'center' }}>
+      <Box>
+        <Text style={{ fontSize: 72, fontWeight: 'bold', color: '#3B82F6', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace', lineHeight: 1.0 }}>35–60×</Text>
+        <Text style={{ fontSize: 18, color: '#94A3B8', marginTop: 6 }}>GGUF 量化 + GPU 全层卸载的路线提速</Text>
+      </Box>
+      <Table
+        style={{ width: '100%', height: 208 }}
+        defaultTextStyle={{ fontSize: 15, textAlign: 'center', color: '#F1F5F9' }}
+        defaultCellStyle={{
+          border: {
+            left: { width: 1, color: '#334155' },
+            right: { width: 1, color: '#334155' },
+            top: { width: 1, color: '#334155' },
+            bottom: { width: 1, color: '#334155' },
+          },
+        }}
+        cells={[
+          [
+            { text: '指标', textStyle: { bold: true, color: '#3B82F6' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: 'transformers bf16', textStyle: { bold: true, color: '#94A3B8' }, cellStyle: { background: { color: '#1E293B' } } },
+            { text: 'llama.cpp Q4_K_M', textStyle: { bold: true, color: '#06B6D4' }, cellStyle: { background: { color: '#1E293B' } } },
+          ],
+          ['1.7B 速度', '3.5 tok/s', { text: '134 tok/s', textStyle: { bold: true, color: '#06B6D4' } }],
+          ['4B 速度', '~1 tok/s', { text: '63 tok/s', textStyle: { bold: true, color: '#06B6D4' } }],
+          ['显存', '3.7GB 单模型', { text: '5.5GB 双模型同驻', textStyle: { bold: true, color: '#06B6D4' } }],
+        ]}
+      />
+      <Text style={{ fontSize: 14, color: '#94A3B8', lineHeight: 1.6 }}>RTX 5060 Laptop 8GB · 驱动 592.27 · 2026-09-18 真机实测</Text>
+    </Box>
+    <Box style={{ flex: 1, justifyContent: 'center' }}>
+      <Box style={{ background: '#FFFFFF', borderRadius: 12, paddingTop: 12, paddingBottom: 10, paddingLeft: 14, paddingRight: 14 }}>
+        <Image src="assets/bench_chart.png" style={{ width: 656, height: 474 }} />
+        <Text style={{ fontSize: 13, color: '#334155', marginTop: 6, textAlign: 'center' }}>scripts/plot_bench.py 自动出图 · 数据口径见 docs/speed-benchmark.md</Text>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>07 / 12</Text>
+  </Box>
+</Slide>

@@ -1,0 +1,81 @@
+<Slide style={{ width: 1280, height: 720, background: '#0F172A', padding: '20px 72px', display: 'flex', flexDirection: 'column' }}>
+  <Box style={{ height: 80, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 34, fontWeight: 'bold', color: '#F1F5F9' }}>溯源校验：凭什么信它</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8', letterSpacing: 3 }}>04 · 可信溯源</Text>
+  </Box>
+  <Box style={{ flex: 1, flexDirection: 'column', gap: 14, marginTop: 16 }}>
+    <Box style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+      <Box style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, background: '#1E293B', borderRadius: 6 }}><Text style={{ fontSize: 15, color: '#F1F5F9' }}>回答切句</Text></Box>
+      <Text style={{ fontSize: 16, color: '#94A3B8' }}>→</Text>
+      <Box style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, background: '#1E293B', borderRadius: 6 }}><Text style={{ fontSize: 15, color: '#F1F5F9' }}>8-gram 指纹</Text></Box>
+      <Text style={{ fontSize: 16, color: '#94A3B8' }}>→</Text>
+      <Box style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, background: '#1E293B', borderRadius: 6 }}><Text style={{ fontSize: 15, color: '#F1F5F9' }}>回查原文索引</Text></Box>
+      <Text style={{ fontSize: 16, color: '#94A3B8' }}>→</Text>
+      <Box style={{ paddingTop: 8, paddingBottom: 8, paddingLeft: 16, paddingRight: 16, background: 'rgba(6,182,212,0.15)', border: '1px solid rgba(6,182,212,0.5)', borderRadius: 6 }}><Text style={{ fontSize: 15, color: '#06B6D4' }}>命中率分级</Text></Box>
+      <Text style={{ fontSize: 15, color: '#94A3B8', marginLeft: 12 }}>合同审阅演示：13 句真实校验（模拟 4B 文本 × 真实校验器）</Text>
+    </Box>
+    <Table
+      style={{ width: '100%', height: 320 }}
+      defaultTextStyle={{ fontSize: 18, textAlign: 'left', color: '#F1F5F9' }}
+      defaultCellStyle={{
+        border: {
+          left: { width: 1, color: '#334155' },
+          right: { width: 1, color: '#334155' },
+          top: { width: 1, color: '#334155' },
+          bottom: { width: 1, color: '#334155' },
+        },
+      }}
+      cells={[
+        [
+          { text: '判定', textStyle: { bold: true, color: '#3B82F6', textAlign: 'center' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '命中率', textStyle: { bold: true, color: '#3B82F6', textAlign: 'center' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '含义', textStyle: { bold: true, color: '#3B82F6', textAlign: 'center' }, cellStyle: { background: { color: '#1E293B' } } },
+          { text: '真实样例（13 句演示样本）', textStyle: { bold: true, color: '#3B82F6', textAlign: 'center' }, cellStyle: { background: { color: '#1E293B' } } },
+        ],
+        [
+          { text: '● 已溯源', textStyle: { bold: true, color: '#06B6D4', fontSize: 22, textAlign: 'center' }, cellStyle: { background: { color: 'rgba(6,182,212,0.10)' } } },
+          { text: '0.50 – 1.00', textStyle: { bold: true, color: '#06B6D4', textAlign: 'center' }, cellStyle: { background: { color: 'rgba(6,182,212,0.10)' } } },
+          { text: '引用踩中原文，页码可点开核验', cellStyle: { background: { color: 'rgba(6,182,212,0.10)' } } },
+          { text: '「第二条约定试用期为六个月」→ 样例A p1', cellStyle: { background: { color: 'rgba(6,182,212,0.10)' } } },
+        ],
+        [
+          { text: '● 部分溯源', textStyle: { bold: true, color: '#F59E0B', fontSize: 22, textAlign: 'center' }, cellStyle: { background: { color: 'rgba(245,158,11,0.10)' } } },
+          { text: '0.01 – 0.49', textStyle: { bold: true, color: '#F59E0B', textAlign: 'center' }, cellStyle: { background: { color: 'rgba(245,158,11,0.10)' } } },
+          { text: '条款综合分析，建议重点核对', cellStyle: { background: { color: 'rgba(245,158,11,0.10)' } } },
+          { text: '「补偿与限制期限明显不匹配」0.29–0.33', cellStyle: { background: { color: 'rgba(245,158,11,0.10)' } } },
+        ],
+        [
+          { text: '● 未溯源', textStyle: { bold: true, color: '#94A3B8', fontSize: 22, textAlign: 'center' } },
+          { text: '< 0.01', textStyle: { bold: true, color: '#94A3B8', textAlign: 'center' } },
+          { text: '外部法条 / 建议，不是从你的资料里来的' },
+          { text: '《劳动合同法》第十九条 · 修改建议 0.00' },
+        ],
+      ]}
+    />
+    <Box style={{ flex: 1, flexDirection: 'row', gap: 20, alignItems: 'center' }}>
+      <Box style={{ flex: 1, borderLeft: '3px solid #3B82F6', background: 'rgba(59,130,246,0.08)', borderRadius: 6, paddingTop: 14, paddingBottom: 14, paddingLeft: 18, paddingRight: 18 }}>
+        <Text style={{ fontSize: 19, color: '#F1F5F9', lineHeight: 1.6 }}>
+          <span style={{ fontWeight: 'bold', color: '#3B82F6' }}>口径：</span>不是判断模型「对不对」，而是把每句话分类——10 秒知道该核查哪几句
+        </Text>
+      </Box>
+      <Box style={{ flexDirection: 'row', gap: 24, alignItems: 'center' }}>
+        <Box style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#06B6D4', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace' }}>5</Text>
+          <Text style={{ fontSize: 14, color: '#94A3B8' }}>已溯源</Text>
+        </Box>
+        <Box style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#F59E0B', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace' }}>3</Text>
+          <Text style={{ fontSize: 14, color: '#94A3B8' }}>部分溯源</Text>
+        </Box>
+        <Box style={{ alignItems: 'center' }}>
+          <Text style={{ fontSize: 52, fontWeight: 'bold', color: '#94A3B8', fontFamily: 'Inter, JetBrains Mono, Consolas, monospace' }}>5</Text>
+          <Text style={{ fontSize: 14, color: '#94A3B8' }}>未溯源</Text>
+        </Box>
+      </Box>
+    </Box>
+  </Box>
+  <Box style={{ height: 28, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>卷宗 · Spark-X2.5 端侧挑战赛</Text>
+    <Text style={{ fontSize: 14, color: '#94A3B8' }}>06 / 12</Text>
+  </Box>
+</Slide>

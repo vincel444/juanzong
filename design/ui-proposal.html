@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>卷宗 · 界面设计原型 v2.0</title>
+<style>
+/* ============================================================
+   卷宗 Design Tokens v2 —— 与 PPT 视觉体系同源
+   ============================================================ */
+:root{
+  --bg-base:#0F172A;        /* 全局底 */
+  --bg-panel:#1E293B;       /* 面板 */
+  --bg-panel-2:#243147;     /* 面板悬停/嵌套 */
+  --bg-input:#17233B;       /* 输入底 */
+  --border:#334155;
+  --border-soft:#2A3A54;
+  --text-hi:#F1F5F9;
+  --text-mid:#94A3B8;
+  --text-low:#7C8BA1;
+  --blue:#3B82F6;  --blue-deep:#2563EB;   /* 主按钮/强调（白字对比 5.2:1）*/
+  --cyan:#06B6D4;
+  --ok:#34D399;    --ok-dim:rgba(52,211,153,.12);
+  --warn:#FBBF24;  --warn-dim:rgba(251,191,36,.10);
+  --err:#F87171;   --err-dim:rgba(248,113,113,.10);
+  --font-ui:"Microsoft YaHei UI","PingFang SC","Segoe UI",system-ui,sans-serif;
+  --font-mono:"JetBrains Mono","Cascadia Mono",Consolas,monospace;
+  --r-sm:6px; --r-md:10px; --r-lg:14px;
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px; --sp-6:24px;
+  --sh-1:0 1px 2px rgba(0,0,0,.35);
+  --sh-2:0 8px 24px rgba(0,0,0,.35);
+  --tr-fast:150ms ease; --tr-norm:280ms ease;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg-base);color:var(--text-hi);
+  font-family:var(--font-ui);font-size:14px;line-height:1.65;
+  display:flex;overflow:hidden;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;border-radius:var(--r-sm)}
+::selection{background:rgba(59,130,246,.35)}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-thumb{background:#2A3A54;border-radius:5px;border:2px solid var(--bg-base)}
+::-webkit-scrollbar-track{background:transparent}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ================= 布局骨架 ================= */
+.rail{width:264px;flex:none;background:var(--bg-panel);border-right:1px solid var(--border-soft);
+  display:flex;flex-direction:column;padding:var(--sp-4) var(--sp-3);gap:var(--sp-3)}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.cite{width:332px;flex:none;background:#152036;border-left:1px solid var(--border-soft);
+  display:flex;flex-direction:column;transition:margin var(--tr-norm)}
+.cite.hidden{margin-right:-332px}
+
+/* ================= 左栏 ================= */
+.brand{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-2) var(--sp-2) var(--sp-3)}
+.seal{width:40px;height:40px;border-radius:10px;background:var(--bg-panel-2);
+  border-left:4px solid var(--blue);display:flex;align-items:center;justify-content:center;
+  font-size:20px;font-weight:700;flex:none}
+.brand h1{font-size:18px;letter-spacing:4px;font-weight:600}
+.brand p{font-size:11px;color:var(--text-low);letter-spacing:1px}
+
+.card{background:var(--bg-panel-2);border:1px solid var(--border-soft);border-radius:var(--r-md);padding:var(--sp-3)}
+.card h2{font-size:11px;font-weight:600;color:var(--text-low);letter-spacing:2px;margin-bottom:var(--sp-2)}
+
+.svc{display:flex;align-items:center;gap:var(--sp-2);padding:5px 0;font-size:12.5px}
+.svc .dot{width:8px;height:8px;border-radius:50%;background:var(--ok);flex:none;animation:pulse 2.4s infinite}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(52,211,153,.5)}50%{box-shadow:0 0 0 5px rgba(52,211,153,0)}}
+.svc .name{color:var(--text-hi);flex:1}
+.svc .meta{font-family:var(--font-mono);font-size:10.5px;color:var(--text-low)}
+.vram{margin-top:var(--sp-2)}
+.vram .bar{height:5px;border-radius:3px;background:#0F172A;overflow:hidden;margin-top:4px}
+.vram .bar i{display:block;height:100%;width:69%;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.vram .lab{display:flex;justify-content:space-between;font-size:10.5px;color:var(--text-low);font-family:var(--font-mono)}
+
+.tier{display:flex;gap:6px;margin-top:var(--sp-2)}
+.tier span{flex:1;text-align:center;font-size:10.5px;padding:4px 2px;border-radius:var(--r-sm);
+  border:1px solid var(--border);color:var(--text-mid)}
+.tier .t-lite{color:var(--cyan);border-color:rgba(6,182,212,.4)}
+.tier .t-mid{color:var(--blue);border-color:rgba(59,130,246,.4)}
+.tier .t-deep{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+
+.docs{flex:1;overflow-y:auto;min-height:0}
+.doc{display:flex;align-items:center;gap:var(--sp-2);width:100%;text-align:left;
+  padding:var(--sp-2);border-radius:var(--r-sm);transition:background var(--tr-fast)}
+.doc:hover{background:rgba(59,130,246,.08)}
+.doc.on{background:rgba(59,130,246,.14)}
+.doc svg{flex:none}
+.doc .fn{flex:1;min-width:0}
+.doc .fn b{display:block;font-size:12.5px;font-weight:500;color:var(--text-hi);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.doc .fn small{font-size:10.5px;color:var(--text-low);font-family:var(--font-mono)}
+.doc .chk{width:16px;height:16px;border-radius:5px;border:1.5px solid var(--border);flex:none;
+  display:flex;align-items:center;justify-content:center;color:transparent;font-size:11px;transition:all var(--tr-fast)}
+.doc.on .chk{background:var(--blue-deep);border-color:var(--blue-deep);color:#fff}
+.offline{display:flex;align-items:center;justify-content:center;gap:6px;
+  font-size:11px;color:var(--text-low);padding-top:var(--sp-2);border-top:1px solid var(--border-soft)}
+.offline i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+
+/* ================= 主区：消息流 ================= */
+.stream{flex:1;overflow-y:auto;padding:var(--sp-6) var(--sp-8);display:flex;flex-direction:column;gap:var(--sp-5)}
+.msg-user{align-self:flex-end;max-width:68%;background:linear-gradient(135deg,#2563EB,#3B82F6);
+  color:#fff;border-radius:var(--r-lg) var(--r-lg) 4px var(--r-lg);
+  padding:var(--sp-3) var(--sp-4);box-shadow:var(--sh-1)}
+.msg-ai{width:100%;background:var(--bg-panel);border:1px solid var(--border-soft);
+  border-left:3px solid var(--blue);border-radius:4px var(--r-lg) var(--r-lg) var(--r-lg);
+  padding:var(--sp-4) var(--sp-5);box-shadow:var(--sh-1)}
+.mhead{display:flex;align-items:center;gap:var(--sp-2);margin-bottom:var(--sp-2)}
+.badge{font-size:11px;font-weight:600;padding:2px 10px;border-radius:99px;letter-spacing:.5px}
+.badge.b-deep{background:var(--blue-deep);color:#fff}
+.badge.b-mid{color:var(--blue);border:1px solid rgba(59,130,246,.5)}
+.badge.b-lite{color:var(--cyan);border:1px solid rgba(6,182,212,.5)}
+.mhead .t{font-size:11px;color:var(--text-low);font-family:var(--font-mono)}
+.mhead .st{margin-left:auto;font-size:11px;color:var(--ok)}
+
+details.think{margin:0 0 var(--sp-3);border:1px dashed var(--border);border-radius:var(--r-md);
+  background:rgba(15,23,42,.45)}
+details.think summary{cursor:pointer;padding:8px var(--sp-3);font-size:12px;color:var(--text-mid);
+  list-style:none;display:flex;align-items:center;gap:8px;user-select:none}
+details.think summary::-webkit-details-marker{display:none}
+details.think summary::before{content:"▸";color:var(--cyan);transition:transform var(--tr-fast)}
+details.think[open] summary::before{transform:rotate(90deg)}
+details.think .tbody{padding:0 var(--sp-3) var(--sp-3);font-size:12.5px;color:var(--text-mid);
+  line-height:1.8}
+.typing::after{content:"▍";color:var(--cyan);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+.body p{margin:0 0 var(--sp-2);font-size:14px;color:var(--text-hi)}
+mark{color:inherit;background:none;padding:1px 2px;border-radius:3px}
+mark.ok{background:var(--ok-dim);box-shadow:inset 0 -2px 0 var(--ok)}
+mark.part{background:var(--warn-dim);box-shadow:inset 0 -2px 0 var(--warn)}
+mark.miss{background:var(--err-dim);box-shadow:inset 0 -2px 0 var(--err);text-decoration:wavy underline var(--err) 1px}
+mark:hover{filter:brightness(1.25)}
+
+.runbar{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2) var(--sp-4);
+  margin-top:var(--sp-3);padding-top:var(--sp-3);border-top:1px solid var(--border-soft);
+  font-size:11.5px;color:var(--text-mid)}
+.runbar .kv{display:flex;align-items:center;gap:5px}
+.runbar .kv b{font-family:var(--font-mono);font-weight:600;color:var(--text-hi);font-size:11.5px}
+.runbar .sep{width:1px;height:12px;background:var(--border)}
+.vstat{display:flex;align-items:center;gap:5px}
+.vstat i{width:7px;height:7px;border-radius:50%;background:var(--ok);display:inline-block}
+.vstat.w i{background:var(--warn)}
+.citebtn{margin-left:auto;font-size:11.5px;color:var(--cyan);border:1px solid rgba(6,182,212,.4);
+  padding:4px 12px;border-radius:99px;transition:all var(--tr-fast)}
+.citebtn:hover{background:rgba(6,182,212,.12)}
+
+/* ================= 输入区 ================= */
+.composer{padding:var(--sp-4) var(--sp-8) var(--sp-5);border-top:1px solid var(--border-soft);
+  background:rgba(15,23,42,.6)}
+.route{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--text-mid);
+  background:var(--bg-panel-2);border:1px solid var(--border-soft);border-radius:99px;
+  padding:3px 12px;margin-bottom:var(--sp-2);transition:all var(--tr-fast)}
+.route i{width:7px;height:7px;border-radius:50%;background:var(--cyan)}
+.route.deep{color:#fff;background:var(--blue-deep);border-color:var(--blue-deep)}
+.route.deep i{background:#fff}
+.ibox{display:flex;align-items:flex-end;gap:var(--sp-2);background:var(--bg-input);
+  border:1px solid var(--border);border-radius:var(--r-lg);padding:var(--sp-2) var(--sp-2) var(--sp-2) var(--sp-4);
+  transition:border var(--tr-fast),box-shadow var(--tr-fast)}
+.ibox:focus-within{border-color:var(--blue);box-shadow:0 0 0 3px rgba(59,130,246,.18)}
+.ibox textarea{flex:1;background:none;border:none;resize:none;color:var(--text-hi);
+  font-family:inherit;font-size:14px;line-height:1.6;height:44px;padding:10px 0;outline:none}
+.ibox textarea::placeholder{color:var(--text-low)}
+.send{width:44px;height:44px;border-radius:var(--r-md);background:var(--blue-deep);color:#fff;
+  display:flex;align-items:center;justify-content:center;flex:none;transition:all var(--tr-fast)}
+.send:hover{background:var(--blue);transform:translateY(-1px);box-shadow:var(--sh-1)}
+.send:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.chips{display:flex;gap:var(--sp-2);margin-top:var(--sp-2);flex-wrap:wrap}
+.chip{font-size:12px;color:var(--text-mid);border:1px solid var(--border);border-radius:99px;
+  padding:5px 14px;transition:all var(--tr-fast)}
+.chip:hover{color:var(--cyan);border-color:rgba(6,182,212,.5);background:rgba(6,182,212,.08)}
+
+/* ================= 右栏：溯源 ================= */
+.chead{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-4) var(--sp-4) var(--sp-2)}
+.chead h2{font-size:13px;font-weight:600;letter-spacing:1px;flex:1}
+.legend{display:flex;gap:10px;padding:0 var(--sp-4) var(--sp-3);font-size:10.5px;color:var(--text-mid)}
+.legend span{display:flex;align-items:center;gap:4px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block}
+.legend .l1 i{background:var(--ok)}.legend .l2 i{background:var(--warn)}.legend .l3 i{background:var(--err)}
+.cites{flex:1;overflow-y:auto;padding:0 var(--sp-3) var(--sp-3);display:flex;flex-direction:column;gap:var(--sp-2)}
+.ccard{background:var(--bg-panel);border:1px solid var(--border-soft);border-radius:var(--r-md);
+  padding:var(--sp-3);transition:border var(--tr-fast)}
+.ccard:hover{border-color:rgba(59,130,246,.5)}
+.ccard .doc-row{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.ccard .doc-row b{font-size:12px;color:var(--text-hi);flex:1}
+.ccard .pg{font-family:var(--font-mono);font-size:10.5px;color:var(--cyan);
+  border:1px solid rgba(6,182,212,.4);border-radius:4px;padding:1px 7px}
+.ccard .q{font-size:12.5px;color:var(--text-mid);line-height:1.75;border-left:2px solid var(--border);
+  padding-left:var(--sp-2);margin-bottom:8px}
+.ccard .hit{display:flex;align-items:center;gap:8px;font-size:10.5px;color:var(--text-low)}
+.ccard .hit .hb{flex:1;height:4px;border-radius:2px;background:#0F172A;overflow:hidden}
+.ccard .hit .hb i{display:block;height:100%}
+.toggle{position:absolute;top:14px;right:14px;z-index:5;font-size:11px;color:var(--text-mid);
+  border:1px solid var(--border);border-radius:99px;padding:4px 12px;background:var(--bg-panel)}
+.toggle:hover{color:var(--cyan);border-color:rgba(6,182,212,.5)}
+
+/* 流式入场 */
+.appear{animation:rise var(--tr-norm) both}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<!-- ============ 左栏：模型 / 资料库 ============ -->
+<aside class="rail">
+  <div class="brand">
+    <div class="seal">卷</div>
+    <div><h1>卷宗</h1><p>本地长文档智能工作台</p></div>
+  </div>
+
+  <div class="card">
+    <h2>模型服务</h2>
+    <div class="svc"><span class="dot"></span><span class="name">Spark-X2.5 · 1.7B</span><span class="meta">11435</span></div>
+    <div class="svc"><span class="dot"></span><span class="name">Spark-X2.5 · 4B</span><span class="meta">11436</span></div>
+    <div class="vram">
+      <div class="lab"><span>显存占用</span><span>5.5 / 8.0 GB</span></div>
+      <div class="bar"><i></i></div>
+    </div>
+    <div class="tier">
+      <span class="t-lite">轻·快答</span><span class="t-mid">中·推理</span><span class="t-deep">深·4B审阅</span>
+    </div>
+  </div>
+
+  <div class="card docs">
+    <h2>资料库 · 3</h2>
+    <button class="doc on" aria-pressed="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      <span class="fn"><b>劳动合同书-样例A.pdf</b><small>18 页 · 已索引</small></span>
+      <span class="chk">✓</span>
+    </button>
+    <button class="doc on" aria-pressed="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      <span class="fn"><b>房屋租赁合同-样例B.pdf</b><small>12 页 · 已索引</small></span>
+      <span class="chk">✓</span>
+    </button>
+    <button class="doc on" aria-pressed="true">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      <span class="fn"><b>软件开发服务协议-样例C.pdf</b><small>15 页 · 已索引</small></span>
+      <span class="chk">✓</span>
+    </button>
+  </div>
+
+  <div class="offline"><i></i>全程端侧离线 · 数据不出设备</div>
+</aside>
+
+<!-- ============ 主区：对话流 ============ -->
+<main class="main" style="position:relative">
+  <button class="toggle" id="citeToggle" aria-label="切换溯源面板">溯源面板 ⟩</button>
+
+  <div class="stream" id="stream">
+    <div class="msg-user appear">对比三份合同的违约金条款，总结差异与风险。</div>
+
+    <article class="msg-ai appear">
+      <div class="mhead">
+        <span class="badge b-deep">深档 · 4B 审阅</span>
+        <span class="t">19:22:07</span>
+        <span class="st">● 完成</span>
+      </div>
+
+      <details class="think" open>
+        <summary>思考过程（312 字）</summary>
+        <div class="tbody">已加载 3 份文档全文 → 定位"违约金 / 赔偿 / 保证金"关键词 14 处 →
+        逐条提取条款原文并交叉比对基数、比例、上限 → 发现样例A试用期违约金与法定上限冲突、
+        样例B解约与违约金责任重叠 → 组织对比结论，按严重程度排序。</div>
+      </details>
+
+      <div class="body">
+        <p><mark class="ok" title="已溯源 · 样例A P7">三份合同的违约金设定逻辑差异明显：样例A将试用期违约金约定为「月薪的 200%」，直接近两个月工资的法定上限</mark>。</p>
+        <p><mark class="ok" title="已溯源 · 样例B P3">样例B中「提前解约通知期」与「违约金」条款存在责任重叠，承租人可能被双重追责</mark>。</p>
+        <p><mark class="part" title="部分溯源 · 综合样例B P3/P5">样例C的赔偿上限（合同总额的 30%）与质保金返还周期（6 个月）存在时间错配，实操中容易引发争议</mark>。</p>
+        <p><mark class="miss" title="未溯源 · 无原文依据">综合来看，建议优先 renegotiate 样例A的试用期条款，其法律风险等级最高。</mark></p>
+        <p><mark class="part" title="部分溯源 · 综合多页">以上风险按「法律合规 → 条款冲突 → 商业惯例」三级排序，建议逐条人工复核。</mark></p>
+      </div>
+
+      <div class="runbar">
+        <span class="kv">模型 <b>Spark-X2.5-4B</b></span><span class="sep"></span>
+        <span class="kv">首字 <b>0.86 s</b></span><span class="sep"></span>
+        <span class="kv">总时延 <b>38.4 s</b></span><span class="sep"></span>
+        <span class="kv">输出 <b>1,247 tok</b></span><span class="sep"></span>
+        <span class="vstat"><i></i>溯源 <b style="font-family:var(--font-mono)">3/5</b>&nbsp;命中 · 2 句待复核</span>
+        <button class="citebtn" onclick="showCites(0)">查看引用 →</button>
+      </div>
+    </article>
+  </div>
+
+  <!-- ============ 输入区 ============ -->
+  <div class="composer">
+    <span class="route" id="route"><i></i><span id="routeTxt">输入问题，自动选择回答档位</span></span>
+    <div class="ibox">
+      <textarea id="q" rows="1" placeholder="向卷宗提问…（回车发送）" aria-label="问题输入框"></textarea>
+      <button class="send" id="send" aria-label="发送">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4z"/></svg>
+      </button>
+    </div>
+    <div class="chips">
+      <button class="chip">合同里甲方是谁？</button>
+      <button class="chip">试用期约定合法吗？</button>
+      <button class="chip">对比三份合同的违约金</button>
+      <button class="chip">哪份合同对我最不利？</button>
+    </div>
+  </div>
+</main>
+
+<!-- ============ 右栏：溯源面板 ============ -->
+<aside class="cite" id="citePanel">
+  <div class="chead"><h2>溯源引用</h2><span style="font-size:10.5px;color:var(--text-low);font-family:var(--font-mono)">最近 1 条回答</span></div>
+  <div class="legend">
+    <span class="l1"><i></i>已溯源</span>
+    <span class="l2"><i></i>部分溯源</span>
+    <span class="l3"><i></i>未溯源</span>
+  </div>
+  <div class="cites" id="citeList"></div>
+</aside>
+
+<script>
+/* ---------- 演示数据 ---------- */
+const CITES = [
+  {doc:"劳动合同书-样例A.pdf", pg:"P7", hit:0.92,
+   q:"试用期违约金不得超过每月工资的 200%，且不得超过实际培训支出…"},
+  {doc:"房屋租赁合同-样例B.pdf", pg:"P3", hit:0.88,
+   q:"承租人提前解约须提前 30 日通知，并支付两个月租金作为违约金…"},
+  {doc:"软件开发服务协议-样例C.pdf", pg:"P9", hit:0.41,
+   q:"乙方赔偿责任以合同总额 30% 为限；质保金于验收后 6 个月返还…"},
+  {doc:"房屋租赁合同-样例B.pdf", pg:"P5", hit:0.35,
+   q:"租金总额以补充协议约定为准，年度涨幅不超过 5%…"}
+];
+const list = document.getElementById("citeList");
+function renderCites(){
+  list.innerHTML = CITES.map(c=>{
+    const col = c.hit>=.7?"var(--ok)":c.hit>=.3?"var(--warn)":"var(--err)";
+    return `<div class="ccard">
+      <div class="doc-row"><b>${c.doc}</b><span class="pg">${c.pg}</span></div>
+      <div class="q">「${c.q}」</div>
+      <div class="hit"><span>命中</span><span class="hb"><i style="width:${c.hit*100}%;background:${col}"></i></span><b style="font-family:var(--font-mono);color:${col}">${Math.round(c.hit*100)}%</b></div>
+    </div>`}).join("");
+}
+renderCites();
+
+/* ---------- 溯源面板开合 ---------- */
+const panel=document.getElementById("citePanel"),tgl=document.getElementById("citeToggle");
+tgl.onclick=()=>{panel.classList.toggle("hidden");
+  tgl.textContent=panel.classList.contains("hidden")?"⟨ 溯源面板":"溯源面板 ⟩";};
+
+/* ---------- 资料库勾选 ---------- */
+document.querySelectorAll(".doc").forEach(d=>d.onclick=()=>{
+  d.classList.toggle("on");d.setAttribute("aria-pressed",d.classList.contains("on"));});
+
+/* ---------- 档位路由预测 ---------- */
+const q=document.getElementById("q"),route=document.getElementById("route"),routeTxt=document.getElementById("routeTxt");
+const DEEP=/对比|总结|审阅|风险|差异|全面|逐条|分析/;
+q.addEventListener("input",()=>{
+  const v=q.value.trim();
+  route.classList.remove("deep");
+  if(!v){routeTxt.textContent="输入问题，自动选择回答档位";return;}
+  if(DEEP.test(v)){route.classList.add("deep");routeTxt.textContent="复杂问题 · 将由 4B 深档审阅（约 40s）";}
+  else if(v.length<12){routeTxt.textContent="简短问题 · 1.7B 轻档快答（<1s）";}
+  else{routeTxt.textContent="一般问题 · 1.7B 中档推理（3~8s）";}
+});
+q.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();sendMsg();}});
+document.getElementById("send").onclick=sendMsg;
+
+/* ---------- 快捷提问 ---------- */
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{q.value=c.textContent;q.dispatchEvent(new Event("input"));q.focus();});
+
+/* ---------- 模拟流式对话 ---------- */
+const stream=document.getElementById("stream");
+const DEMO={
+  lite:{badge:"轻档 · 1.7B 快答",cls:"b-lite",think:"",body:["甲方为「星辰科技有限公司」，统一社会信用代码见样例A P1。"],
+    run:["0.28 s","1.9 s","86 tok"],v:"5/5"},
+  mid:{badge:"中档 · 1.7B 推理",cls:"b-mid",
+    think:"检索「甲方/委托方/出租方」字段 → 汇总三份文档首部主体信息 → 核对签章页。",
+    body:["三份合同的签约主体各不相同：","<mark class='ok'>样例A甲方为星辰科技，样例B出租方为个人李某，样例C委托方为云帆网络</mark>。","<mark class='part'>签约主体资格均未见明显瑕疵，但样例B建议补充身份证明附件。</mark>"],
+    run:["0.42 s","6.8 s","312 tok"],v:"4/5"},
+  deep:{badge:"深档 · 4B 审阅",cls:"b-deep",
+    think:"已加载 3 份文档全文 → 逐条提取责任条款 → 交叉比对基数与上限 → 按风险等级排序输出。",
+    body:["<mark class='ok'>样例A试用期违约金为月薪 200%，触及《劳动合同法》法定上限，合规风险最高</mark>。","<mark class='part'>样例B解约通知期与违约金条款存在责任重叠，可能被双重追责</mark>。","<mark class='miss'>综合判断，建议优先重谈样例A试用期条款并要求书面补充协议。</mark>"],
+    run:["0.83 s","36.2 s","986 tok"],v:"2/4"}
+};
+let busy=false;
+function sendMsg(){
+  if(busy)return;
+  const text=q.value.trim();if(!text)return;
+  const d=DEEP.test(text)?DEMO.deep:(text.length<12?DEMO.lite:DEMO.mid);
+  stream.insertAdjacentHTML("beforeend",`<div class="msg-user appear"></div>`);
+  const lastUser=stream.lastElementChild;lastUser.textContent=text;q.value="";q.dispatchEvent(new Event("input"));
+  busy=true;document.getElementById("send").disabled=true;
+  const t=new Date().toTimeString().slice(0,8);
+  stream.insertAdjacentHTML("beforeend",`
+    <article class="msg-ai appear">
+      <div class="mhead"><span class="badge ${d.cls}">${d.badge}</span><span class="t">${t}</span>
+      <span class="st" style="color:var(--cyan)">● 流式输出中…</span></div>
+      ${d.think?`<details class="think" open><summary>思考中…</summary><div class="tbody typing">${d.think}</div></details>`:""}
+      <div class="body"></div>
+      <div class="runbar" hidden></div>
+    </article>`);
+  const card=stream.lastElementChild;
+  const body=card.querySelector(".body"),st=card.querySelector(".st");
+  const think=card.querySelector("details.think");
+  let i=0;
+  function next(){
+    if(i<d.body.length){
+      body.insertAdjacentHTML("beforeend",`<p class="appear">${d.body[i]}</p>`);
+      i++;setTimeout(next,i===1?700:520);
+    }else{
+      if(think){think.querySelector("summary").textContent=
+        `思考过程（${d.think.length} 字）`;
+        const tb=think.querySelector(".tbody");if(tb)tb.classList.remove("typing");}
+      st.textContent="● 完成";st.style.color="var(--ok)";
+      const rb=card.querySelector(".runbar");rb.hidden=false;
+      rb.innerHTML=`<span class="kv">首字 <b>${d.run[0]}</b></span><span class="sep"></span>
+        <span class="kv">总时延 <b>${d.run[1]}</b></span><span class="sep"></span>
+        <span class="kv">输出 <b>${d.run[2]}</b></span><span class="sep"></span>
+        <span class="vstat ${d.v.includes("/")&&parseInt(d.v)<d.v.split("/")[1]?"w":""}"><i></i>溯源 <b style="font-family:var(--font-mono)">${d.v}</b>&nbsp;命中</span>`;
+      busy=false;document.getElementById("send").disabled=false;
+      stream.scrollTop=stream.scrollHeight;
+    }
+    stream.scrollTop=stream.scrollHeight;
+  }
+  setTimeout(next,600);
+}
+
+/* 点击正文高亮句 → 右栏对应引用卡闪烁定位 */
+document.addEventListener("click",e=>{
+  const m=e.target.closest("mark");if(!m)return;
+  panel.classList.remove("hidden");
+  const idx=m.classList.contains("ok")?0:m.classList.contains("part")?2:3;
+  const card=list.children[idx];
+  if(card){card.scrollIntoView({behavior:"smooth",block:"center"});
+    card.style.borderColor="var(--cyan)";
+    setTimeout(()=>card.style.borderColor="",1600);}
+});
+stream.scrollTop=stream.scrollHeight;
+</script>
+</body>
+</html>
