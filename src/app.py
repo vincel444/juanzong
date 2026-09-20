@@ -90,9 +90,10 @@ margin-top:4px;justify-content:center}
 #upload-box{font-size:12px;margin-top:2px}
 #upload-box label span, #upload-box button span{font-size:11.5px!important;color:var(--mid)!important}
 #upload-box .upload-container, #upload-box [class*="upload"]{border-color:var(--bd2)!important}
-/* 资料库多选列表（卡片化） */
+/* 资料库多选列表（卡片化 + 自适应滚动） */
 #docs-list{background:var(--panel2);border:1px solid var(--bd2);border-radius:10px;
-padding:10px 12px;margin-bottom:10px}
+padding:10px 12px;margin-bottom:10px;
+max-height:calc(100vh - 330px);min-height:96px;overflow-y:auto}
 #docs-list > div > span, #docs-list label.container > span{
 font-size:11px!important;font-weight:600!important;color:var(--low)!important;letter-spacing:2px}
 #docs-list label{display:flex!important;gap:8px;align-items:flex-start;
@@ -103,6 +104,9 @@ border-bottom:1px dashed var(--bd2);transition:background var(--tr-fast);margin:
 width:15px;height:15px;margin-top:3px;flex:none}
 #docs-list label span:not(.ellipsis){font-size:12.5px!important;
 color:var(--hi)!important;line-height:1.55!important;word-break:break-all}
+/* 左栏收紧上移 / 右栏 */
+.rail{gap:5px!important;padding:8px 10px 8px 12px!important}
+.cite-col{gap:5px!important;padding:8px 10px 8px 10px!important}
 """
 
 BRAND = """
@@ -236,7 +240,8 @@ def refresh_all():
     choices = docs_choices()
     kind = library_kind()
     # 默认全选（= 全部资料），用户可点选/取消任意文件
-    return (gr.update(choices=choices,
+    return (check_backend_html(),
+            gr.update(choices=choices,
                       value=[v for _, v in choices]),
             *chips_for(kind))
 
@@ -406,13 +411,10 @@ def chat_turn_stream(question: str, history: list, selected: list | None = None)
 # ---------------------------------------------------------------- 界面
 with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
     with gr.Row(equal_height=False):
-        # ---- 左栏 ----
-        with gr.Column(scale=1, min_width=252):
+        # ---- 左栏（紧凑：品牌 + 资料库 + 上传）----
+        with gr.Column(scale=1, min_width=252, elem_classes="rail"):
             gr.HTML(BRAND)
-            svc = gr.HTML("点击下方按钮检测模型服务")
-            with gr.Row():
-                check_btn = gr.Button("检测服务", size="sm")
-                refresh_btn = gr.Button("刷新资料", size="sm")
+            refresh_btn = gr.Button("刷新资料库", size="sm")
             docs = gr.CheckboxGroup(
                 label="资料库（点击勾选 = 只问所选；全不勾 = 全部资料）",
                 choices=[], value=[],
@@ -440,16 +442,19 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
                                  container=False)
                 send = gr.Button("发送 ➤", variant="primary", scale=1)
             clear = gr.Button("清空对话", size="sm", variant="secondary")
-        # ---- 右栏 ----
-        with gr.Column(scale=2, min_width=290):
+        # ---- 右栏（模型服务 + 溯源明细）----
+        with gr.Column(scale=2, min_width=290, elem_classes="cite-col"):
+            svc = gr.HTML("模型服务检测中…")
+            check_btn = gr.Button("检测模型服务", size="sm")
             gr.HTML('<div class="jz-card" style="padding:8px 12px">'
                     '<h3 style="margin:0">溯源引用 · 最近回答</h3></div>')
             cite = gr.HTML(CITE_EMPTY)
 
     # ---- 事件 ----
-    demo.load(refresh_all, outputs=[docs, chip1, chip2, chip3, chip4])
+    demo.load(refresh_all, outputs=[svc, docs, chip1, chip2, chip3, chip4])
     check_btn.click(check_backend_html, outputs=svc)
-    refresh_btn.click(refresh_all, outputs=[docs, chip1, chip2, chip3, chip4])
+    refresh_btn.click(refresh_all,
+                      outputs=[svc, docs, chip1, chip2, chip3, chip4])
     upload.upload(handle_upload, upload, [docs, chip1, chip2, chip3, chip4])
 
     msg.input(predict_route, msg, route)
