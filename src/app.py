@@ -9,7 +9,9 @@
 from __future__ import annotations
 
 import html as _html
+import shutil
 import subprocess
+from pathlib import Path
 
 import gradio as gr
 
@@ -84,6 +86,10 @@ font-size:19px;font-weight:700;flex:none}
 .jz-offline{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--low);
 margin-top:4px;justify-content:center}
 .jz-offline i{width:7px;height:7px;border-radius:50%;background:var(--ok)}
+/* 上传入口 */
+#upload-box{font-size:12px;margin-top:2px}
+#upload-box label span, #upload-box button span{font-size:11.5px!important;color:var(--mid)!important}
+#upload-box .upload-container, #upload-box [class*="upload"]{border-color:var(--bd2)!important}
 """
 
 BRAND = """
@@ -221,6 +227,32 @@ def chips_for(kind: str) -> tuple[str, str, str, str]:
 
 
 def refresh_all():
+    kind = library_kind()
+    return (docs_html(), *chips_for(kind))
+
+
+# ---------------------------------------------------------------- 上传入库
+def handle_upload(files):
+    """把界面上传的文档复制进 data/uploads/（自动重名编号），
+    刷新资料卡与推荐问题；OCR 仍按需在问答时触发。"""
+    if not files:
+        return gr.update(), gr.update(), gr.update(), gr.update(), gr.update()
+    dest = DATA_DIR / "uploads"
+    dest.mkdir(parents=True, exist_ok=True)
+    saved: list[str] = []
+    for f in files or []:
+        src = Path(getattr(f, "path", None) or getattr(f, "name", None) or f)
+        if not Path(src).exists():
+            continue
+        target = dest / Path(src).name
+        i = 1
+        while target.exists():
+            target = dest / f"{Path(src).stem}({i}){Path(src).suffix}"
+            i += 1
+        shutil.copy2(src, target)
+        saved.append(target.name)
+    gr.Info(f"已入库 {len(saved)} 份文档：{('、'.join(saved))[:60]}"
+            + ("…" if len("、".join(saved)) > 60 else ""))
     kind = library_kind()
     return (docs_html(), *chips_for(kind))
 
@@ -368,6 +400,11 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
                 check_btn = gr.Button("检测服务", size="sm")
                 refresh_btn = gr.Button("刷新资料", size="sm")
             docs = gr.HTML("资料库加载中…")
+            upload = gr.File(
+                label="⬆ 上传文档到资料库（PDF / Word / 文本，支持扫描件自动OCR）",
+                file_count="multiple",
+                file_types=[".pdf", ".docx", ".txt", ".md"],
+                elem_id="upload-box")
             gr.HTML('<div class="jz-offline"><i></i>全程端侧离线 · 数据不出设备</div>')
         # ---- 中栏 ----
         with gr.Column(scale=5):
@@ -396,6 +433,7 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
     demo.load(refresh_all, outputs=[docs, chip1, chip2, chip3, chip4])
     check_btn.click(check_backend_html, outputs=svc)
     refresh_btn.click(refresh_all, outputs=[docs, chip1, chip2, chip3, chip4])
+    upload.upload(handle_upload, upload, [docs, chip1, chip2, chip3, chip4])
 
     msg.input(predict_route, msg, route)
     msg.submit(chat_turn_stream, [msg, chatbot], [chatbot, msg, cite])
