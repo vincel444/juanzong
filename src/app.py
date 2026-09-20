@@ -90,6 +90,19 @@ margin-top:4px;justify-content:center}
 #upload-box{font-size:12px;margin-top:2px}
 #upload-box label span, #upload-box button span{font-size:11.5px!important;color:var(--mid)!important}
 #upload-box .upload-container, #upload-box [class*="upload"]{border-color:var(--bd2)!important}
+/* 资料库多选列表（卡片化） */
+#docs-list{background:var(--panel2);border:1px solid var(--bd2);border-radius:10px;
+padding:10px 12px;margin-bottom:10px}
+#docs-list > div > span, #docs-list label.container > span{
+font-size:11px!important;font-weight:600!important;color:var(--low)!important;letter-spacing:2px}
+#docs-list label{display:flex!important;gap:8px;align-items:flex-start;
+padding:7px 6px;border-radius:6px;cursor:pointer;
+border-bottom:1px dashed var(--bd2);transition:background var(--tr-fast);margin:0}
+#docs-list label:hover{background:rgba(59,130,246,.08)}
+#docs-list input[type="checkbox"]{accent-color:var(--blue)!important;
+width:15px;height:15px;margin-top:3px;flex:none}
+#docs-list label span:not(.ellipsis){font-size:12.5px!important;
+color:var(--hi)!important;line-height:1.55!important;word-break:break-all}
 """
 
 BRAND = """
@@ -142,30 +155,23 @@ def check_backend_html() -> str:
 </div>"""
 
 
-def docs_html() -> str:
+def docs_choices() -> list[tuple[str, str]]:
+    """资料库多选列表的 (显示label, 文件名) —— label 携带页数与 OCR 标记。"""
     from retrieval import ocr_info, scan_documents
 
-    files = scan_documents()
-    if not files:
-        return (f'<div class="jz-card"><h3>资料库 · 0</h3>'
-                f'<div style="font-size:12px;color:var(--low)">为空，请放入：'
-                f'{_html.escape(str(DATA_DIR))}</div></div>')
-    rows = []
-    for p in files:
-        pages = ""
+    out: list[tuple[str, str]] = []
+    for p in scan_documents():
+        meta = ""
         try:
             if p.suffix.lower() == ".pdf":
                 from pypdf import PdfReader
-                pages = f"{len(PdfReader(str(p)).pages)} 页 · {ocr_info(p)}"
+                meta = f" · {len(PdfReader(str(p)).pages)} 页 · {ocr_info(p)}"
             else:
-                pages = f"{p.stat().st_size // 1024} KB"
+                meta = f" · {p.stat().st_size // 1024} KB"
         except Exception:
-            pages = "—"
-        rows.append(f'<div class="jz-doc">{DOC_SVG}'
-                    f'<span class="fn"><b>{_html.escape(p.name)}</b>'
-                    f'<small>{pages}</small></span></div>')
-    return (f'<div class="jz-card"><h3>资料库 · {len(files)}</h3>'
-            + "".join(rows) + "</div>")
+            meta = " · —"
+        out.append((f"{p.name}{meta}", p.name))
+    return out
 
 
 # ---------------------------------------------------------------- 推荐问题（随资料库自适应）
@@ -227,8 +233,12 @@ def chips_for(kind: str) -> tuple[str, str, str, str]:
 
 
 def refresh_all():
+    choices = docs_choices()
     kind = library_kind()
-    return (docs_html(), *chips_for(kind))
+    # 默认全选（= 全部资料），用户可点选/取消任意文件
+    return (gr.update(choices=choices,
+                      value=[v for _, v in choices]),
+            *chips_for(kind))
 
 
 # ---------------------------------------------------------------- 上传入库
@@ -253,8 +263,9 @@ def handle_upload(files):
         saved.append(target.name)
     gr.Info(f"已入库 {len(saved)} 份文档：{('、'.join(saved))[:60]}"
             + ("…" if len("、".join(saved)) > 60 else ""))
-    kind = library_kind()
-    return (docs_html(), *chips_for(kind))
+    choices = docs_choices()
+    return (gr.update(choices=choices, value=[v for _, v in choices]),
+            *chips_for(library_kind()))
 
 
 # ---------------------------------------------------------------- 路由预测
@@ -324,8 +335,11 @@ def _render(thinking: list[str], content: list[str], notices: list[str]) -> str:
     return prefix + note + sep + body
 
 
-def chat_turn_stream(question: str, history: list):
-    """流式对话轮：yield (history, msg, 右栏溯源 HTML)。"""
+def chat_turn_stream(question: str, history: list, selected: list | None = None):
+    """流式对话轮：yield (history, msg, 右栏溯源 HTML)。
+
+    selected: 左栏勾选的文件名（空 = 全部资料）。
+    """
     from citation import collect_sources, summarize, verify_answer
     from router import answer_stream
 
@@ -343,7 +357,7 @@ def chat_turn_stream(question: str, history: list):
     notices: list[str] = []
     outcome = None
     try:
-        for kind, payload in answer_stream(question):
+        for kind, payload in answer_stream(question, docs_filter=selected or None):
             if kind == "thinking":
                 thinking.append(payload)
             elif kind == "content":
@@ -399,7 +413,10 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
             with gr.Row():
                 check_btn = gr.Button("检测服务", size="sm")
                 refresh_btn = gr.Button("刷新资料", size="sm")
-            docs = gr.HTML("资料库加载中…")
+            docs = gr.CheckboxGroup(
+                label="资料库（点击勾选 = 只问所选；全不勾 = 全部资料）",
+                choices=[], value=[],
+                elem_id="docs-list")
             upload = gr.File(
                 label="⬆ 上传文档到资料库（PDF / Word / 文本，支持扫描件自动OCR）",
                 file_count="multiple",
@@ -436,14 +453,14 @@ with gr.Blocks(title="卷宗 · 本地长文档工作台") as demo:
     upload.upload(handle_upload, upload, [docs, chip1, chip2, chip3, chip4])
 
     msg.input(predict_route, msg, route)
-    msg.submit(chat_turn_stream, [msg, chatbot], [chatbot, msg, cite])
-    send.click(chat_turn_stream, [msg, chatbot], [chatbot, msg, cite])
+    msg.submit(chat_turn_stream, [msg, chatbot, docs], [chatbot, msg, cite])
+    send.click(chat_turn_stream, [msg, chatbot, docs], [chatbot, msg, cite])
     clear.click(lambda: ([], ROUTE_EMPTY, CITE_EMPTY),
                 outputs=[chatbot, route, cite])
 
     for chip in (chip1, chip2, chip3, chip4):
         chip.click(lambda c: c, chip, msg).then(
-            chat_turn_stream, [msg, chatbot], [chatbot, msg, cite])
+            chat_turn_stream, [msg, chatbot, docs], [chatbot, msg, cite])
 
 
 if __name__ == "__main__":

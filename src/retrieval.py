@@ -211,10 +211,16 @@ def _extract_text(path: Path) -> list[str]:
     return [path.read_text(encoding="utf-8", errors="ignore")]
 
 
-def load_documents() -> list[Chunk]:
-    """解析全部资料为带页码的分块。PDF 按页分块，其余按 800 字分块。"""
+def load_documents(only: set[str] | None = None) -> list[Chunk]:
+    """解析资料为带页码的分块。PDF 按页分块，其余按 800 字分块。
+
+    only: 文件名集合（None=全部）。未选中的文件完全不解析，
+    扫描件也因此不会触发 OCR —— 勾选即是最强的范围控制。
+    """
     chunks: list[Chunk] = []
     for f in scan_documents():
+        if only is not None and f.name not in only:
+            continue
         ext = f.suffix.lower()
         try:
             if ext in PDF_EXTS:

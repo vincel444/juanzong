@@ -33,11 +33,15 @@ def route(question: str) -> Tier:
     return Tier.LOW
 
 
-def _prepare(question: str) -> tuple[str, list]:
-    """解析资料 -> 优先整卷装载，超限退回检索兜底。返回 (user_content, refs)。"""
+def _prepare(question: str, docs_filter: list[str] | None = None) -> tuple[str, list]:
+    """解析资料 -> 优先整卷装载，超限退回检索兜底。返回 (user_content, refs)。
+
+    docs_filter: 勾选的文件名列表（None 或空 = 全部资料）。
+    refs 即过滤后的分块 —— 溯源索引由它构建，自动只回查所选范围。
+    """
     from retrieval import full_context, load_documents, retrieve
 
-    chunks = load_documents()
+    chunks = load_documents(only=set(docs_filter) if docs_filter else None)
     context = full_context(chunks)
     refs = chunks
     mode = "全卷装载"
@@ -69,15 +73,17 @@ def answer(question: str) -> tuple[GenResult, list]:
     return result, refs
 
 
-def answer_stream(question: str):
+def answer_stream(question: str, docs_filter: list[str] | None = None):
     """answer() 的流式版本（P0-#1）。
+
+    docs_filter: 勾选的文件名（None/空 = 全部资料）。
 
     依次产出：
         ("notice", 提示文本)   —— 降级等过程提示
         ("thinking", 思考增量) / ("content", 回答增量)
         ("done", (GenResult, refs, citation_index)) —— 引用索引供溯源校验
     """
-    user_content, refs = _prepare(question)
+    user_content, refs = _prepare(question, docs_filter)
     tier = route(question)
     model, base_url = model_for(tier)
     messages = ([{"role": "system", "content": SYSTEM_PROMPT}] if SYSTEM_PROMPT else []) + [
