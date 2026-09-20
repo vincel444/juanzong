@@ -38,18 +38,24 @@ _owned: list[subprocess.Popen] = []
 def alive(url: str) -> bool:
     import urllib.request
 
+    # 空代理表 → 不走系统/环境代理,避免本机服务探测被代理劫持成误判
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
     try:
-        with urllib.request.urlopen(url, timeout=2) as r:
+        with opener.open(url, timeout=2) as r:
             return r.status < 500
     except Exception:
         return False
 
 
 def ensure_backends() -> None:
-    """按需拉起 llama 双服务与 Gradio（静默、无控制台窗口）。"""
+    """按需拉起 llama 双服务与 Gradio（静默、无控制台窗口）。
+
+    llama 用分离式启动（脱离本进程作业对象）：即使桌面壳异常退出,
+    已加载显存的双模型也继续存活,下次打开秒级就绪。
+    """
     if not (alive(SMALL) and alive(LARGE)):
         _owned.append(subprocess.Popen(
-            [PY, os.path.join(ROOT, "scripts", "start_llama_servers.py")],
+            [PY, os.path.join(ROOT, "scripts", "detach_llama.py"), "--no-wait"],
             cwd=ROOT, creationflags=NO_WINDOW))
     if not alive(UI_URL):
         _owned.append(subprocess.Popen(

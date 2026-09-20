@@ -22,6 +22,11 @@ import requests
 from config import (BACKEND_STYLE, GEN_KWARGS, LARGE_BASE_URL, LARGE_MODEL,
                     SMALL_BASE_URL, SMALL_MODEL, TIMEOUT_SECONDS)
 
+# 本地推理服务一律直连:忽略系统/环境代理(HTTP_PROXY 等),
+# 否则代理进程(如 Clash)会把 127.0.0.1 的请求劫持成 502
+_SESSION = requests.Session()
+_SESSION.trust_env = False
+
 
 class Tier(str, Enum):
     """思考档位（三档自适应，均由官方 chat template 开关驱动）：
@@ -68,7 +73,7 @@ def _chat_openai(base_url: str, model: str, messages: list[dict], think: bool,
         "chat_template_kwargs": {"enable_thinking": think},
         **GEN_KWARGS,
     }
-    r = requests.post(f"{base_url}/v1/chat/completions", json=payload,
+    r = _SESSION.post(f"{base_url}/v1/chat/completions", json=payload,
                       timeout=TIMEOUT_SECONDS)
     r.raise_for_status()
     return r.json()
@@ -83,7 +88,7 @@ def _chat_ollama(base_url: str, model: str, messages: list[dict], think: bool,
         "think": think,
         "options": {**GEN_KWARGS, "num_predict": max_tokens},
     }
-    r = requests.post(f"{base_url}/api/chat", json=payload, timeout=TIMEOUT_SECONDS)
+    r = _SESSION.post(f"{base_url}/api/chat", json=payload, timeout=TIMEOUT_SECONDS)
     r.raise_for_status()
     return r.json()
 
@@ -143,9 +148,10 @@ def chat_stream(model: str, base_url: str, messages: list[dict], tier: Tier,
             "model": model, "messages": messages, "stream": True,
             "think": think, "options": {**GEN_KWARGS, "num_predict": max_tokens},
         }
-        r = requests.post(f"{base_url}/api/chat", json=payload,
+        r = _SESSION.post(f"{base_url}/api/chat", json=payload,
                           timeout=TIMEOUT_SECONDS, stream=True)
         r.raise_for_status()
+        r.encoding = "utf-8"  # SSE 头无 charset 时 requests 会按 ISO-8859-1 解码 → 中文乱码
         for line in r.iter_lines(decode_unicode=True):
             if not line:
                 continue
@@ -172,9 +178,10 @@ def chat_stream(model: str, base_url: str, messages: list[dict], tier: Tier,
             "stream_options": {"include_usage": True},  # llama-server: 最后 chunk 带 usage
             **GEN_KWARGS,
         }
-        r = requests.post(f"{base_url}/v1/chat/completions", json=payload,
+        r = _SESSION.post(f"{base_url}/v1/chat/completions", json=payload,
                           timeout=TIMEOUT_SECONDS, stream=True)
         r.raise_for_status()
+        r.encoding = "utf-8"  # llama-server SSE 头不带 charset,默认 ISO-8859-1 会导致中文乱码
         for raw in r.iter_lines(decode_unicode=True):
             if not raw or not raw.startswith("data: "):
                 continue
